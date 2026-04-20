@@ -167,6 +167,34 @@ curl -A "Mozilla/5.0" -L "<hero-image-url>" -o assets/<brand>-brand/product-hero
 - 产品官方 Twitter/X 的发布截图（常是最新版本）
 - 用户有账号时，直接截屏真实产品界面
 
+**3.4 · 素材质量门槛「5-10-2-8」原则（铁律）**
+
+> **Logo 的规则不同于其他素材**。Logo 有就必须用（没有就停下问用户）；其他素材（产品图/UI/参考图/配图）遵循「5-10-2-8」质量门槛。
+>
+> 2026-04-20 花叔原话：「我们的原则是搜索 5 轮，找到 10 个素材，选择 2 个好的。每个需要评分 8/10 以上，宁可少一些，也不为了完成任务滥竽充数。」
+
+| 维度 | 标准 | 反模式 |
+|---|---|---|
+| **5 轮搜索** | 多渠道交叉搜（官网 / press kit / 官方社媒 / YouTube 截帧 / Wikimedia / 用户账号截屏），不是一轮抓前 2 个就停 | 第一页结果直接用 |
+| **10 个候选** | 至少凑 10 个备选才开始筛 | 只抓 2 个，没得选 |
+| **选 2 个好的** | 从 10 个里精选 2 个作为最终素材 | 全都用 = 视觉过载 + 品位稀释 |
+| **每个 8/10 分以上** | 不够 8 分**宁可不用**，用诚实 placeholder（灰块+文字标签）或 AI 生成（nano-banana-pro 以官方参考为基底）| 凑数 7 分素材进 brand-spec.md |
+
+**8/10 评分维度**（打分时记录在 `brand-spec.md`）：
+
+1. **分辨率** · ≥2000px（印刷/大屏场景 ≥3000px）
+2. **版权清晰度** · 官方来源 > 公共领域 > 免费素材 > 疑似盗图（疑似盗图直接 0 分）
+3. **与品牌气质契合度** · 和 brand-spec.md 里的「气质关键词」一致
+4. **光线/构图/风格一致性** · 2 个素材放一起不打架
+5. **独立叙事能力** · 能单独表达一个叙事角色（不是装饰）
+
+**为什么这个门槛是铁律**：
+- 花叔的哲学：**宁缺毋滥**。滥竽充数的素材比没有更糟——污染视觉品味、传递「不专业」信号
+- **「一个细节做到 120%，其他做到 80%」的量化版**：8 分是"其他 80%" 的底线，真正 hero 素材要 9-10 分
+- 消费者看作品时，每一个视觉元素都在**积分或扣分**。7 分素材 = 扣分项，不如留空
+
+**Logo 例外**（重申）：有就必须用，不适用「5-10-2-8」。因为 logo 不是「多选一」问题，而是「识别度根基」问题——就算 logo 本身只有 6 分，也比没有 logo 强 10 倍。
+
 ##### Step 4 · 验证 + 提取（不只是 grep 色值）
 
 | 资产 | 验证动作 |
@@ -601,7 +629,15 @@ Screen 组件接 callback props（`onEnter`、`onClose`、`onTabChange`、`onOpe
 7. **验证**：用Playwright截图（见 `references/verification.md`），检查控制台错误，发给用户。
    🛑 **检查点4：交付前自己肉眼过一遍浏览器**。AI写的代码经常有interaction bug。
 8. **总结**：极简，只说caveats和next steps。
-9. **（可选）导出视频**：如果是动画HTML，用户若提「导出/MP4/GIF/60fps」，按 `references/video-export.md` 走：`scripts/render-video.js` 录 25fps MP4 → `scripts/convert-formats.sh` 派生 60fps MP4 + palette 优化 GIF → `scripts/add-music.sh` 加 BGM（6 首场景化配乐，按 `--mood=tech/ad/educational/tutorial` 选）。
+9. **（默认）导出视频 · 必带 SFX + BGM**：动画 HTML 的**默认交付形态是带音频的 MP4**，不是纯画面。无声版本等于半成品——用户潜意识感知「画在动但没声音响应」，廉价感的根源就在这里。流水线：
+   - `scripts/render-video.js` 录 25fps 纯画面 MP4（只是中间产物，**不是成品**）
+   - `scripts/convert-formats.sh` 派生 60fps MP4 + palette 优化 GIF（视平台需要）
+   - `scripts/add-music.sh` 加 BGM（6 首场景化配乐：tech/ad/educational/tutorial + alt 变体）
+   - SFX 按 `references/audio-design-rules.md` 设计 cue 清单（时间轴 + 音效类型），用 `assets/sfx/<category>/*.mp3` 37 个预制资源，按配方 A/B/C/D 选密度（发布 hero ≈ 6个/10s，工具演示 ≈ 0-2个/10s）
+   - **BGM + SFX 双轨制必须同时做**——只做 BGM 是 ⅓ 分完成度；SFX 占高频、BGM 占低频，频段隔离见 audio-design-rules.md 的 ffmpeg 模板
+   - 交付前 `ffprobe -select_streams a` 确认有 audio stream，没有则不是成品
+   - **跳过音频的条件**：用户明确说「不要音频」「纯画面」「我要自己配音」——否则默认带。
+   - 参考完整流程见 `references/video-export.md` + `references/audio-design-rules.md` + `references/sfx-library.md`。
 10. **（可选）专家评审**：用户若提「评审」「好不好看」「review」「打分」，或你对产出有疑问想主动质检，按 `references/critique-guide.md` 走 5 维度评审——哲学一致性 / 视觉层级 / 细节执行 / 功能性 / 创新性各 0-10 分，输出总评 + Keep（做得好的）+ Fix（严重程度 ⚠️致命 / ⚡重要 / 💡优化）+ Quick Wins（5 分钟能做的前 3 件事）。评审设计不评设计师。
 
 **检查点原则**：碰到🛑就停下，明确告诉用户"我做了X，下一步打算Y，你确认吗？"然后真的**等**。不要说完自己就开始做。
