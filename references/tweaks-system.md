@@ -1,20 +1,20 @@
-# Tweaks：设计变体实时调参
+# Tweaks: 디자인 변형 실시간 파라미터 조정
 
-Tweaks是这个skill里很核心的能力——让用户不改代码就能实时切换variations/调整参数。
+Tweaks는 이 skill의 핵심 기능입니다. 사용자가 코드를 수정하지 않고도 실시간으로 variations를 전환하고 파라미터를 조정할 수 있게 합니다.
 
-**跨 agent 环境适配**：某些 design-agent 原生环境（如 Claude.ai Artifacts）依赖 host 的 postMessage 把 tweak 值回写源码做持久化。本 skill 采用**纯前端 localStorage 方案**——效果一致（刷新保留状态），但持久化发生在浏览器 localStorage 而不是源码文件。这个方案在任何 agent 环境（Claude Code / Codex / Cursor / Trae / etc.）都能工作。
+**에이전트(agent) 환경 간 호환**: 일부 design-agent의 기본 환경(예: Claude.ai Artifacts)은 호스트의 postMessage를 통해 tweak 값을 소스코드에 다시 써서 영속화합니다. 이 skill은 **순수 프론트엔드 localStorage 방식**을 사용합니다. 효과는 동일하며(새로고침 시 상태 유지), 다만 영속화가 브라우저의 localStorage에서 이루어지지 소스코드 파일이 아닙니다. 이 방식은 모든 에이전트 환경(Claude Code / Codex / Cursor / Trae / 기타)에서 작동합니다.
 
-## 何时加 Tweaks
+## Tweaks를 추가하는 시점
 
-- 用户明确要求"能调参"/"多个版本切换"
-- 设计有多个variations需要对比时
-- 用户没明说，但你主观判断**加几个有启发性的tweaks能帮用户看到可能性**
+- 사용자가 "파라미터 조정 가능" / "여러 버전 전환"을 명시적으로 요청한 경우
+- 디자인에 여러 variations를 비교해야 하는 경우
+- 사용자가 말하지 않았더라도, 주관적으로 **몇 가지 의미 있는 tweaks를 추가하면 사용자에게 가능성을 보여줄 수 있다고 판단되는 경우**
 
-默认推荐：**每个设计都加2-3个tweaks**（颜色主题/字号/layout变体）即使用户没要求——让用户看到可能性空间是设计服务的一部分。
+기본 권장사항: 사용자가 요청하지 않더라도 **모든 디자인에 2~3개의 tweaks**(색상 테마 / 글자 크기 / layout 변형)를 추가하세요. 사용자에게 가능성의 공간을 보여주는 것 자체가 디자인 서비스의 일부입니다.
 
-## 实现方式（纯前端版）
+## 구현 방식 (순수 프론트엔드 버전)
 
-### 基本结构
+### 기본 구조
 
 ```jsx
 const TWEAK_DEFAULTS = {
@@ -53,9 +53,9 @@ function useTweaks() {
 }
 ```
 
-### Tweaks面板UI
+### Tweaks 패널 UI
 
-右下角浮动面板。可折叠：
+우측 하단 고정 패널. 접기/펼치기 가능:
 
 ```jsx
 function TweaksPanel() {
@@ -92,9 +92,9 @@ function TweaksPanel() {
             }}>×</button>
           </div>
 
-          {/* 颜色 */}
+          {/* 색상 */}
           <label style={{ display: 'block', marginBottom: 12 }}>
-            <div style={{ marginBottom: 4, color: '#666' }}>主色</div>
+            <div style={{ marginBottom: 4, color: '#666' }}>주요 색상</div>
             <input 
               type="color" 
               value={tweaks.primaryColor} 
@@ -103,9 +103,9 @@ function TweaksPanel() {
             />
           </label>
 
-          {/* 字号slider */}
+          {/* 글자 크기 슬라이더 */}
           <label style={{ display: 'block', marginBottom: 12 }}>
-            <div style={{ marginBottom: 4, color: '#666' }}>字号 ({tweaks.fontSize}px)</div>
+            <div style={{ marginBottom: 4, color: '#666' }}>글자 크기 ({tweaks.fontSize}px)</div>
             <input 
               type="range" 
               min={12} max={24} step={1}
@@ -115,21 +115,21 @@ function TweaksPanel() {
             />
           </label>
 
-          {/* 密度选项 */}
+          {/* 밀도 옵션 */}
           <label style={{ display: 'block', marginBottom: 12 }}>
-            <div style={{ marginBottom: 4, color: '#666' }}>密度</div>
+            <div style={{ marginBottom: 4, color: '#666' }}>밀도</div>
             <select 
               value={tweaks.density}
               onChange={e => update({ density: e.target.value })}
               style={{ width: '100%', padding: 6 }}
             >
-              <option value="compact">紧凑</option>
-              <option value="comfortable">舒适</option>
-              <option value="spacious">宽松</option>
+              <option value="compact">촘촘하게</option>
+              <option value="comfortable">편안하게</option>
+              <option value="spacious">여유 있게</option>
             </select>
           </label>
 
-          {/* 暗黑模式toggle */}
+          {/* 다크 모드 토글 */}
           <label style={{ 
             display: 'flex', 
             alignItems: 'center',
@@ -141,7 +141,7 @@ function TweaksPanel() {
               checked={tweaks.dark}
               onChange={e => update({ dark: e.target.checked })}
             />
-            <span>暗黑模式</span>
+            <span>다크 모드</span>
           </label>
 
           <button onClick={reset} style={{
@@ -152,7 +152,7 @@ function TweaksPanel() {
             borderRadius: 6,
             cursor: 'pointer',
             fontSize: 12,
-          }}>重置</button>
+          }}>초기화</button>
         </div>
       ) : (
         <button 
@@ -174,9 +174,9 @@ function TweaksPanel() {
 }
 ```
 
-### 应用Tweaks
+### Tweaks 적용하기
 
-在主组件里用Tweaks：
+메인 컴포넌트에서 Tweaks를 사용합니다:
 
 ```jsx
 function App() {
@@ -189,14 +189,14 @@ function App() {
       background: tweaks.dark ? '#0A0A0A' : '#FAFAFA',
       color: tweaks.dark ? '#FAFAFA' : '#1A1A1A',
     }}>
-      {/* 你的内容 */}
+      {/* 콘텐츠 */}
       <TweaksPanel />
     </div>
   );
 }
 ```
 
-CSS里用变量：
+CSS에서 변수를 사용합니다:
 
 ```css
 button.cta {
@@ -206,74 +206,74 @@ button.cta {
 }
 ```
 
-## 典型 Tweak 选项
+## 대표적인 Tweak 옵션
 
-给不同类型的设计加什么tweaks：
+디자인 유형별로 어떤 tweaks를 추가하면 좋은지:
 
-### 通用
-- 主色（color picker）
-- 字号（slider 12-24px）
-- 字型（select：display font vs body font）
-- 暗黑模式（toggle）
+### 공통
+- 주요 색상 (color picker)
+- 글자 크기 (slider 12-24px)
+- 서체 (select: display font vs body font)
+- 다크 모드 (toggle)
 
-### 幻灯片deck
-- 主题（light/dark/brand）
-- 背景样式（solid/gradient/image）
-- 字体对比（更装饰 vs 更克制）
-- 信息密度（minimal/standard/dense）
+### 슬라이드 덱(deck)
+- 테마 (light/dark/brand)
+- 배경 스타일 (solid/gradient/image)
+- 서체 대비 (더 장식적인 vs 더 절제된)
+- 정보 밀도 (minimal/standard/dense)
 
-### 产品原型
-- 布局变体（layout A / B / C）
-- 交互速度（animation speed 0.5x-2x）
-- 数据量（mock数据条数 5/20/100）
-- 状态（empty/loading/success/error）
+### 프로토타입
+- 레이아웃 변형 (layout A / B / C)
+- 인터랙션 속도 (animation speed 0.5x-2x)
+- 데이터량 (mock 데이터 개수 5/20/100)
+- 상태 (empty/loading/success/error)
 
-### 动画
-- 速度（0.5x-2x）
-- 循环（once/loop/ping-pong）
-- Easing（linear/easeOut/spring）
+### 애니메이션
+- 속도 (0.5x-2x)
+- 반복 (once/loop/ping-pong)
+- Easing (linear/easeOut/spring)
 
-### Landing page
-- Hero风格（image/gradient/pattern/solid）
-- CTA文案（几种变体）
-- 结构（single column / two column / sidebar）
+### 랜딩 페이지
+- Hero 스타일 (image/gradient/pattern/solid)
+- CTA 문구 (몇 가지 변형)
+- 구조 (single column / two column / sidebar)
 
-## Tweaks设计原则
+## Tweaks 설계 원칙
 
-### 1. 有意义的选项，不是折腾人的
+### 1. 의미 있는 옵션만 제공하세요
 
-每个tweak必须展示**真实的设计选项**。别加那种谁都不会真切换的tweak（比如border-radius 0-50px的slider——用户调完发现所有中间值都丑）。
+모든 tweak는 **실제로 유용한 디자인 옵션**을 보여줘야 합니다. 실제로 아무도 전환하지 않을 tweaks는 추가하지 마세요(예: border-radius 0-50px slider. 사용자가 중간값을 모두 조정해봐도 다 못생기게 보입니다).
 
-好的tweak暴露**离散的、有思考的variations**：
-- "圆角风格"：无圆角 / 微圆角 / 大圆角（三个选项）
-- 不是："圆角"：0-50px slider
+좋은 tweak은 **이산적이고 의도가 담긴 variations**를 노출합니다:
+- "모서리 스타일": 둥글게 없음 / 살짝 둥글게 / 크게 둥글게 (세 가지 옵션)
+- 나쁜 예: "모서리": 0-50px slider
 
-### 2. 少即是多
+### 2. 적을수록 좋습니다
 
-一个设计的Tweaks面板**最多5-6个**选项。再多就变成"配置页面"，失去了快速探索variations的意义。
+하나의 디자인에 Tweaks 패널은 **최대 5-6개**의 옵션까지만 추가하세요. 그 이상이 되면 "설정 페이지"가 되어 variations를 빠르게 탐색하는 의미를 잃습니다.
 
-### 3. 默认值是完成设计
+### 3. 기본값은 완성된 디자인이어야 합니다
 
-Tweaks是**锦上添花**。默认值必须本身就是一个完整、可发布的设计。用户关闭Tweaks面板后看到的就是产出。
+Tweaks는 **덧붙이는 요소**입니다. 기본값 자체가 완성되고 배포 가능한 디자인이어야 합니다. 사용자가 Tweaks 패널을 닫으면 보이는 것이 최종 결과물이어야 합니다.
 
-### 4. 合理分组
+### 4. 적절히 그룹화하세요
 
-选项多时分组显示：
+옵션이 많을 때는 그룹별로 표시하세요:
 
 ```
----- 视觉 ----
-主色 | 字号 | 暗黑模式
+---- 시각 ----
+주요 색상 | 글자 크기 | 다크 모드
 
----- 布局 ----
-密度 | 侧栏位置
+---- 레이아웃 ----
+밀도 | 사이드바 위치
 
----- 内容 ----
-显示数据量 | 状态
+---- 콘텐츠 ----
+표시 데이터량 | 상태
 ```
 
-## 向前兼容源码级持久化 host
+## 향후 소스코드 수준의 영속화 호스트와의 호환성
 
-如果你以后想把设计上传到支持源码级 tweaks（如 Claude.ai Artifacts）的环境也能跑，保留 **EDITMODE 标记块**：
+나중에 디자인을 소스코드 수준의 tweaks를 지원하는 환경(예: Claude.ai Artifacts)에 업로드해도 동작하도록 **EDITMODE 마커 블록**을 유지하세요:
 
 ```jsx
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
@@ -284,26 +284,26 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 }/*EDITMODE-END*/;
 ```
 
-标记块在 localStorage 方案里**无作用**（只是个普通注释），但在支持源码回写的 host 里会被读取，实现源码级持久化。加上这个对当前环境无害，同时保持向前兼容。
+마커 블록은 localStorage 방식에서는 **아무런 기능이 없습니다**(그냥 일반 주석일 뿐), 하지만 소스코드 쓰기를 지원하는 호스트에서는 읽혀서 소스코드 수준의 영속화를 구현합니다. 이것을 추가해도 현재 환경에는 영향이 없으면서 동시에 향후 호환성을 유지할 수 있습니다.
 
-## 常见问题
+## 자주 묻는 질문
 
-**Tweaks面板挡住设计内容**
-→ 让它可关闭。默认关闭，显示一个小按钮，用户点了才展开。
+**Tweaks 패널이 디자인 콘텐츠를 가립니다**
+→ 닫을 수 있게 만드세요. 기본적으로 닫힌 상태이며 작은 버튼을 표시하고, 사용자가 클릭하면 펼쳐지게 합니다.
 
-**用户切换tweaks后还要重复设置**
-→ 已经用localStorage。如果刷新后不持久，检查localStorage是否可用（无痕模式会失败，要catch）。
+**사용자가 tweaks를 전환한 후에도 설정이 반복해서 초기화됩니다**
+→ 이미 localStorage를 사용하고 있습니다. 새로고침 후에도 유지되지 않는다면 localStorage가 사용 가능한지 확인하세요(시크릿 모드에서는 실패할 수 있으므로 catch 처리가 필요합니다).
 
-**多个HTML页面想共享tweaks**
-→ 给localStorage key加project name：`design-tweaks-[projectName]`。
+**여러 HTML 페이지에서 tweaks를 공유하고 싶습니다**
+→ localStorage 키에 프로젝트 이름을 추가하세요: `design-tweaks-[projectName]`.
 
-**我想让tweak之间有联动关系**
-→ 在`update`里加逻辑：
+**tweak 간에 연동 관계를 만들고 싶습니다**
+→ `update` 함수에 로직을 추가하세요:
 
 ```jsx
 const update = (patch) => {
   let next = { ...tweaks, ...patch };
-  // 联动：选dark mode时自动切换字体配色
+  // 연동: 다크 모드 선택 시 자동으로 텍스트 색상 전환
   if (patch.dark === true && !patch.textColor) {
     next.textColor = '#F0EEE6';
   }

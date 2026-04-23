@@ -1,209 +1,209 @@
-# Video Export：HTML 动画导出为 MP4/GIF
+# 비디오 익스포트(Video Export): HTML 애니메이션을 MP4/GIF로 낸비내기
 
-动画 HTML 完成后，用户常想「能导出视频吗」。这份指南给出完整流程。
+HTML 애니메이션이 완성되면, 사용자들은 종종 "비디오로 낼 수 있나요?"라고 묻습니다. 이 가이드는 전체 작업 흐름을 안내합니다.
 
-## 何时导出
+## 언제 익스포트하는가
 
-**导出时机**：
-- 动画完整跑通、视觉验证过（Playwright 截图确认各时间点状态正确）
-- 用户在浏览器里看过至少一次，表示效果 OK
-- **不要**在动画 bug 没修完的阶段导出——导出到视频后改起来更贵
+**익스포트 타이밍**:
+- 애니메이션이 완전히 작동하고, 시각적으로 검증되었을 때 (Playwright 스크린샷으로 각 시간대 상태가 올바른지 확인)
+- 사용자가 브라우저에서 최소 한 번은 확인하고, 효과가 괜찮다고 했을 때
+- 애니메이션 버그를 아직 수정하지 않은 단계에서는 **익스포트하지 마세요** — 비디오로 낸 뒤 수정하는 것이 훨씬 번거롭습니다
 
-**用户可能说的触发语**：
-- 「能导出成视频吗」
-- 「转成 MP4」
-- 「做成 GIF」
-- 「60fps」
+**사용자가 말할 수 있는 트리거 문구**:
+- "비디오로 낼 수 있나요"
+- "MP4로 바꿔주세요"
+- "GIF로 만들어주세요"
+- "60fps로요"
 
-## 产出规格
+## 산출물 스펙
 
-默认一次给三种格式，让用户选：
+기본적으로 세 가지 포맷을 한 번에 제공하여 사용자가 선택할 수 있게 합니다:
 
-| 格式 | 规格 | 适合场景 | 典型大小（30s） |
+| 포맷 | 스펙 | 적합한 장면 | 일반적인 크기 (30초 기준) |
 |---|---|---|---|
-| MP4 25fps | 1920×1080 · H.264 · CRF 18 | 公众号嵌入、视频号、YouTube | 1-2 MB |
-| MP4 60fps | 1920×1080 · minterpolate 插帧 · H.264 · CRF 18 | 高帧率展示、B站、作品集 | 1.5-3 MB |
-| GIF | 960×540 · 15fps · palette 优化 | Twitter/X、README、Slack 预览 | 2-4 MB |
+| MP4 25fps | 1920×1080 · H.264 · CRF 18 | 공식 계정 임베드, 비디오 채널, YouTube | 1-2 MB |
+| MP4 60fps | 1920×1080 · minterpolate 보간 · H.264 · CRF 18 | 고프레임 전시, Bilibili, 포트폴리오 | 1.5-3 MB |
+| GIF | 960×540 · 15fps · 팔레트(palette) 최적화 | Twitter/X, README, Slack 미리보기 | 2-4 MB |
 
-## 工具链
+## 툴체인(Toolchain)
 
-两个脚本在 `scripts/`：
+`scripts/`에 두 개의 스크립트가 있습니다:
 
 ### 1. `render-video.js` — HTML → MP4
 
-录一个 25fps 的 MP4 基础版本。依赖全局 playwright。
+25fps MP4 기본 버전을 녹화합니다. 전역 playwright에 의존합니다.
 
 ```bash
-NODE_PATH=$(npm root -g) node /path/to/claude-design/scripts/render-video.js <html文件>
+NODE_PATH=$(npm root -g) node /path/to/claude-design/scripts/render-video.js <html 파일>
 ```
 
-可选参数：
-- `--duration=30` 动画时长（秒）
-- `--width=1920 --height=1080` 分辨率
-- `--trim=2.2` 从视频开头裁掉的秒数（去掉 reload + 字体加载时间）
-- `--fontwait=1.5` 字体加载等待时间（秒），字体多时调高
+선택적 파라미터:
+- `--duration=30` 애니메이션 길이 (초)
+- `--width=1920 --height=1080` 해상도
+- `--trim=2.2` 영상 시작 부분에서 잘라낼 초 수 (새로고침 + 폰트 로딩 시간 제거)
+- `--fontwait=1.5` 폰트 로딩 대기 시간 (초), 폰트가 많을 때 높게 설정
 
-输出：与 HTML 同目录，同名 `.mp4`。
+출력: HTML과 같은 디렉토리, 같은 이름의 `.mp4`.
 
 ### 2. `add-music.sh` — MP4 + BGM → MP4
 
-给无声 MP4 混入背景音乐，按场景（mood）从内置 BGM 库里选，也可自带音频。自动匹配时长、加淡入淡出。
+무성 MP4에 배경 음악을 믹스합니다. 장면(분위기, mood)에 따라 내장 BGM 라이브러리에서 선택하거나, 직접 오디오를 가져올 수도 있습니다. 자동으로 길이를 맞추고, 페이드 인/아웃을 추가합니다.
 
 ```bash
 bash add-music.sh <input.mp4> [--mood=<name>] [--music=<path>] [--out=<path>]
 ```
 
-**内置 BGM 库**（在 `assets/bgm-<mood>.mp3`）：
+**내장 BGM 라이브러리** (`assets/bgm-<mood>.mp3`):
 
-| `--mood=` | 风格 | 适配场景 |
+| `--mood=` | 스타일 | 적합한 장면 |
 |-----------|------|---------|
-| `tech`（默认） | Apple Silicon / 苹果发布会，极简合成器+钢琴 | 产品发布、AI工具、Skill 宣传 |
-| `ad` | upbeat 现代电子，有 build + drop | 社交媒体广告、产品预告、促销片 |
-| `educational` | 温暖明亮、轻吉他/电钢琴，inviting | 科普、教程介绍、课程预告 |
-| `educational-alt` | 同类备选，换一首试试 | 同上 |
-| `tutorial` | lo-fi 环境音，几乎无存在感 | 软件演示、编程教程、长演示 |
-| `tutorial-alt` | 同类备选 | 同上 |
+| `tech` (기본) | Apple Silicon / 애플 발표회 스타일, 미니멀 신디사이저+피아노 | 제품 발표, AI 도구, Skill 홍보 |
+| `ad` | 업비트(upbeat) 현대 일렉트로닉, 빌드(build)+드롭(drop) 있음 | 소셜 미디어 광고, 제품 티저, 프로모션 영상 |
+| `educational` | 따뜻하고 밝은, 경량 기타/전자 피아노, inviting | 과학 상식, 튜토리얼 소개, 강의 예고 |
+| `educational-alt` | 같은 계열 대안, 다른 곡으로 시도필 때 | 위와 동일 |
+| `tutorial` | 로파이(lo-fi) 앰비언트, 거의 느껴지지 않음 | 소프트웨어 데모, 프로그래밍 튜토리얼, 긴 데모 |
+| `tutorial-alt` | 같은 계열 대안 | 위와 동일 |
 
-**行为**：
-- 音乐按视频时长裁剪
-- 0.3s 淡入 + 1s 淡出（避免硬切）
-- 视频流 `-c:v copy` 不重编码，音频 AAC 192k
-- `--music=<path>` 优先级高于 `--mood`，可以直接指定任意外部音频
-- 传错 mood 名会列出所有可用选项，不会静默失败
+**동작**:
+- 음악을 비디오 길이에 맞춰 자릅니다
+- 0.3초 페이드 인 + 1초 페이드 아웃 (갑작스러운 끊김 방지)
+- 비디오 스트림 `-c:v copy`로 재인코딩하지 않고, 오디오는 AAC 192k
+- `--music=<path>`가 `--mood`보다 우선순위가 높아, 어떤 외부 오디오라도 직접 지정할 수 있습니다
+- 잘못된 mood 이름을 전달하면 사용 가능한 모든 옵션을 나열하며, 조용히 실패하지 않습니다
 
-**典型流水线**（动画导出三件套 + 配乐）：
+**전형적인 파이프라인** (애니메이션 익스포트 3종 + 배경음악):
 ```bash
-node render-video.js animation.html                        # 录屏
-bash convert-formats.sh animation.mp4                      # 派生 60fps + GIF
-bash add-music.sh animation-60fps.mp4                      # 加默认 tech BGM
-# 或针对不同场景：
+node render-video.js animation.html                        # 화면 녹화
+bash convert-formats.sh animation.mp4                      # 60fps + GIF 파생
+bash add-music.sh animation-60fps.mp4                      # 기본 tech BGM 추가
+# 또는 장멸에 맞게:
 bash add-music.sh tutorial-demo.mp4 --mood=tutorial
 bash add-music.sh product-promo.mp4 --mood=ad --out=promo-final.mp4
 ```
 
 ### 3. `convert-formats.sh` — MP4 → 60fps MP4 + GIF
 
-从已有 MP4 生成 60fps 版本和 GIF。
+기존 MP4에서 60fps 버전과 GIF를 생성합니다.
 
 ```bash
 bash /path/to/claude-design/scripts/convert-formats.sh <input.mp4> [gif_width] [--minterpolate]
 ```
 
-输出（与输入同目录）：
-- `<name>-60fps.mp4` — 默认用 `fps=60` 帧复制（兼容性广）；加 `--minterpolate` 启用高质量插帧
-- `<name>.gif` — palette 优化的 GIF（默认 960 宽，可改）
+출력 (입력과 같은 디렉토리):
+- `<name>-60fps.mp4` — 기본적으로 `fps=60` 프레임 복사 (호환성 넓음); `--minterpolate` 추가 시 고품질 보간 활성화
+- `<name>.gif` — 팔레트(palette) 최적화 GIF (기본 960 너비, 변경 가능)
 
-**60fps 模式选择**：
+**60fps 모드 선택**:
 
-| 模式 | 命令 | 兼容性 | 使用场景 |
+| 모드 | 명령어 | 호환성 | 사용 장면 |
 |---|---|---|---|
-| 帧复制（默认）| `convert-formats.sh in.mp4` | QuickTime/Safari/Chrome/VLC 全通 | 通用交付、上传平台、社交媒体 |
-| minterpolate 插帧 | `convert-formats.sh in.mp4 --minterpolate` | macOS QuickTime/Safari 可能拒打 | B站等需要真插帧的展示场景，**交付前必须本地测**目标播放器 |
+| 프레임 복사 (기본) | `convert-formats.sh in.mp4` | QuickTime/Safari/Chrome/VLC 전체 통과 | 일반 전달, 업로드 플랫폼, 소셜 미디어 |
+| minterpolate 보간 | `convert-formats.sh in.mp4 --minterpolate` | macOS QuickTime/Safari에서 거부할 수 있음 | Bilibili 등 진정한 보간이 필요한 전시 장면, **전달 전 반드시 로컬에서 대상 플레이어를 테스트** |
 
-为什么默认改成帧复制？minterpolate 输出的 H.264 elementary stream 有 known compat bug——之前默认 minterpolate 时多次踩到「macOS QuickTime 打不开」的问题。详见 `animation-pitfalls.md` §14。
+왜 기본을 프레임 복사로 바꿨나요? minterpolate가 출력하는 H.264 elementary stream에는 알려진 호환성 버그가 있습니다 — 이전에 minterpolate를 기본으로 했을 때 "macOS QuickTime이 열리지 않는다"는 문제를 여러 번 겪었습니다. 자세한 내용은 `animation-pitfalls.md` §14을 참조하세요.
 
-`gif_width` 参数：
-- 960（默认）—— 社交平台通用
-- 1280 —— 更清晰但文件更大
-- 600 —— Twitter/X 优先加载
+`gif_width` 파라미터:
+- 960 (기본) — 소셜 플랫폼 범용
+- 1280 — 더 선명하지만 파일이 큼
+- 600 — Twitter/X 우선 로딩
 
-## 完整流程（标准推荐）
+## 전체 프로세스 (표준 권장)
 
-用户说「导出视频」后：
+사용자가 "비디오로 내보내주세요"라고 한 뒤:
 
 ```bash
-cd <项目目录>
+cd <프로젝트 디렉토리>
 
-# 假设 $SKILL 指向本 skill 的根目录（自行按安装位置替换）
+# $SKILL이 본 skill의 루트 디렉토리를 가리킨다고 가정 (설치 위치에 맞게 직접 교체)
 
-# 1. 录 25fps 基础 MP4
+# 1. 25fps 기본 MP4 녹화
 NODE_PATH=$(npm root -g) node "$SKILL/scripts/render-video.js" my-animation.html
 
-# 2. 派生 60fps MP4 和 GIF
+# 2. 60fps MP4와 GIF 파생
 bash "$SKILL/scripts/convert-formats.sh" my-animation.mp4
 
-# 产出清单：
+# 산출물 목록:
 # my-animation.mp4         (25fps · 1-2 MB)
 # my-animation-60fps.mp4   (60fps · 1.5-3 MB)
 # my-animation.gif         (15fps · 2-4 MB)
 ```
 
-## 技术细节（排错用）
+## 기술적 세부사항 (문제 해결용)
 
-### Playwright recordVideo 的坑
+### Playwright recordVideo의 함정
 
-- 帧率固定 25fps，无法直接录 60fps（Chromium headless 的 compositor 上限）
-- 从 context 创建就开始录，必须用 `trim` 裁掉前面的加载时间
-- 默认 webm 格式，需要 ffmpeg 转 H.264 MP4 才能通用播放
+- 프레임 레이트는 25fps로 고정되어 있어, 직접 60fps를 녹화할 수 없습니다 (Chromium headless의 컴포지터 상한)
+- context 생성부터 녹화가 시작되므로, `trim`으로 앞쪽 로딩 시간을 잘라내야 합니다
+- 기본 webm 포맷이므로, 범용 재생을 위해 ffmpeg로 H.264 MP4로 변환해야 합니다
 
-`render-video.js` 已处理以上问题。
+`render-video.js`는 위 문제들을 모두 처리합니다.
 
-### ffmpeg minterpolate 参数
+### ffmpeg minterpolate 파라미터
 
-当前配置：`minterpolate=fps=60:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1`
+현재 설정: `minterpolate=fps=60:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1`
 
-- `mi_mode=mci` — motion compensation interpolation（运动补偿）
-- `mc_mode=aobmc` — adaptive overlapped block motion compensation
-- `me_mode=bidir` — 双向运动估计
-- `vsbmc=1` — 可变 size block motion compensation
+- `mi_mode=mci` — motion compensation interpolation (모션 보상 보간)
+- `mc_mode=aobmc` — adaptive overlapped block motion compensation (적응형 겹침 블록 모션 보상)
+- `me_mode=bidir` — 양방향 모션 추정
+- `vsbmc=1` — 가변 크기 블록 모션 보상
 
-对 CSS **transform 动画**（translate/scale/rotate）效果好。
-对**纯 fade** 可能产生轻微 ghosting——如果用户嫌弃，退化为简单帧复制：
+CSS **트랜스폼(transform) 애니메이션** (translate/scale/rotate)에 효과가 좋습니다.
+**순수 페이드(fade)**에는 경미한 고스팅(ghosting)이 발생할 수 있습니다 — 사용자가 불만족스러워하면 단순 프레임 복사로 대체하세요:
 
 ```bash
 ffmpeg -i input.mp4 -r 60 -c:v libx264 ... output.mp4
 ```
 
-### GIF palette 为何要两阶段
+### GIF 팔레트(palette)가 2단계를 거치는 이유
 
-GIF 只能 256 色。一次 pass 的 GIF 会把全动画色彩压到 256 色通用 palette，对米色底+橙色这种细腻配色会糊。
+GIF는 256색만 가능합니다. 한 번의 패스(pass)로 GIF를 만들면 전체 애니메이션 색상을 256색 범용 팔레트로 압축하여, 베이지 바탕+오렌지 같은 섬세한 배색이 뭉개집니다.
 
-两阶段：
-1. `palettegen=stats_mode=diff` —— 先扫描全片，生成**针对此动画的 optimal palette**
-2. `paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle` —— 用这个 palette 编码，rectangle diff 只更新变化区域，大幅减小文件
+2단계:
+1. `palettegen=stats_mode=diff` — 먼저 전체 영상을 스캔하여, **이 애니메이션 전용 옵티멀 팔레트(optimal palette)**를 생성
+2. `paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle` — 이 팔레트로 인코딩하고, rectangle diff가 변화 영역만 업데이트하여 파일 크기를 크게 줄임
 
-对 fade 过渡用 `dither=bayer` 比 `none` 更平滑，但文件大一点。
+페이드 전환에는 `dither=bayer`가 `none`보다 더 부드럽지만, 파일이 약간 큽니다.
 
-## Pre-flight check（导出前）
+## 프리플라이트 체크(Pre-flight check) (익스포트 전)
 
-导出前 30 秒自检：
+익스포트 전 30초 자가 점검:
 
-- [ ] HTML 在浏览器里完整跑过一遍，无控制台错误
-- [ ] 动画第 0 帧是完整初始状态（不是空白加载中）
-- [ ] 动画最后一帧是稳定的收尾状态（不是半截）
-- [ ] 字体/图片/emoji 全部正常渲染（参考 `animation-pitfalls.md`）
-- [ ] Duration 参数与 HTML 里的实际动画时长匹配
-- [ ] HTML 中 Stage 检测 `window.__recording` 强制 loop=false（手写 Stage 必查；用 `assets/animations.jsx` 自带）
-- [ ] 结尾 Sprite 的 `fadeOut={0}`（视频末帧不淡出）
-- [ ] 含「Created by Huashu-Design」水印（仅动画场景必加；第三方品牌作品加「非官方出品 · 」前缀。详见 SKILL.md §「Skill 推广水印」）
+- [ ] HTML이 브라우저에서 한 번 완전히 실행되었고, 콘솔 오류가 없음
+- [ ] 애니메이션 0번째 프레임이 완전한 초기 상태 (빈 로딩 중이 아님)
+- [ ] 애니메이션 마지막 프레임이 안정적인 마무리 상태 (중간에 끊기지 않음)
+- [ ] 폰트/이미지/이모지가 모두 정상적으로 렌더링됨 (`animation-pitfalls.md` 참조)
+- [ ] Duration 파라미터가 HTML 내 실제 애니메이션 길이와 일치
+- [ ] HTML의 Stage가 `window.__recording`을 감지하여 loop=false로 강제 설정 (수작업 Stage는 반드시 확인; `assets/animations.jsx` 사용 시 자동 포함)
+- [ ] 마지막 Sprite의 `fadeOut={0}` (비디오 마지막 프레임이 페이드 아웃되지 않음)
+- [ ] "Created by Huashu-Design" 워터마크 포함 (애니메이션 장면에만 필수; 타사 브랜드 작품에는 "비공식 제작 · " 접두사 추가. 자세한 내용은 SKILL.md §「Skill 홍보 워터마크」 참조)
 
-## 交付时附带的说明
+## 전달 시 동봉하는 설명
 
-导出完成后给用户的标准说明格式：
+익스포트 완료 후 사용자에게 제공하는 표준 설명 형식:
 
 ```
-**完整交付**
+**완전한 전달**
 
-| 文件 | 格式 | 规格 | 大小 |
+| 파일 | 포맷 | 스펙 | 크기 |
 |---|---|---|---|
 | foo.mp4 | MP4 | 1920×1080 · 25fps · H.264 | X MB |
-| foo-60fps.mp4 | MP4 | 1920×1080 · 60fps（运动插帧）· H.264 | X MB |
-| foo.gif | GIF | 960×540 · 15fps · palette 优化 | X MB |
+| foo-60fps.mp4 | MP4 | 1920×1080 · 60fps (모션 보간) · H.264 | X MB |
+| foo.gif | GIF | 960×540 · 15fps · 팔레트 최적화 | X MB |
 
-**说明**
-- 60fps 用 minterpolate 做运动估计插帧，transform 动画效果好
-- GIF 用 palette 优化，30s 动画可压到 3MB 左右
+**설명**
+- 60fps는 minterpolate로 모션 추정 보간을 사용하여, 트랜스폼 애니메이션에 효과가 좋습니다
+- GIF는 팔레트 최적화를 사용하여, 30초 애니메이션을 약 3MB로 압축할 수 있습니다
 
-要换尺寸或帧率说一声。
+사이즈나 프레임 레이트를 바꾸려면 말씀해 주세요.
 ```
 
-## 常见用户追加需求
+## 일반적인 사용자 추가 요구사항
 
-| 用户说 | 应对 |
+| 사용자의 말 | 대응 |
 |---|---|
-| 「太大了」 | MP4：提高 CRF 到 23-28；GIF：降分辨率到 600 或 fps 到 10 |
-| 「GIF 太糊」 | 提高 `gif_width` 到 1280；或者建议用 MP4 代替（微信朋友圈也支持） |
-| 「要竖屏 9:16」 | 改 HTML 源的 `--width=1080 --height=1920`，重新录 |
-| 「加水印」 | ffmpeg 加 `-vf "drawtext=..."` 或 `overlay=` 一个 PNG |
-| 「要透明背景」 | MP4 不支持 alpha；用 WebM VP9 + alpha 或 APNG |
-| 「要无损」 | CRF 改 0 + preset veryslow（文件会大 10 倍） |
+| "너무 커요" | MP4: CRF를 23-28로 높임; GIF: 해상도를 600으로 내리거나 fps를 10으로 내림 |
+| "GIF가 너무 뭉개져요" | `gif_width`를 1280으로 높임; 또는 MP4로 대체 제안 (위챗 모멘트도 지원) |
+| "세로 화면 9:16이 필요해요" | HTML 소스의 `--width=1080 --height=1920`으로 수정 후 재녹화 |
+| "워터마크를 넣어주세요" | ffmpeg에 `-vf "drawtext=..."` 또는 PNG `overlay=` 추가 |
+| "투명 배경이 필요해요" | MP4는 알파(alpha)를 지원하지 않음; WebM VP9 + alpha 또는 APNG 사용 |
+| "무손실로 해주세요" | CRF를 0 + preset veryslow로 변경 (파일이 10배 커짐) |

@@ -1,298 +1,322 @@
-# Animation Best Practices · 正向动画设计语法
+# Animation Best Practices · Positive Animation Design Grammar
 
-> 基于 Anthropic 官方三支产品动画（Claude Design / Claude Code Desktop / Claude for Word）
-> 的深度拆解，提炼出的"Anthropic 级"动画设计规则。
+> Anthropic 공식 제품 애니메이션 3편(Claude Design / Claude Code Desktop / Claude for Word)의
+> 심층 분해를 바탕으로 정제한 "Anthropic급" 애니메이션 설계 규칙입니다.
 >
-> 配套 `animation-pitfalls.md`（避坑清单）使用——本文件是「**应该这样做**」，
-> pitfalls 是「**不要这样做**」，两者正交，都要读。
+> `animation-pitfalls.md`(피해야 할 패턴 목록)과 함께 사용하세요. 이 문서는
+> 「**이렇게 해야 한다**」는 긍정적 규범이며, pitfalls는 「**이렇게 하면 안 된다**」는
+> 부정적 규범입니다. 두 문서는 직교(orthogonal) 관계이므로 반드시 함께 읽으세요.
 >
-> **约束声明**：本文件只收录**运动逻辑和表达风格**，**不引入任何品牌色具体色值**。
-> 色彩决策走 §1.a 核心资产协议（从品牌 spec 抽取）或「设计方向顾问」
-> （20 种哲学各自的配色方案）。本 reference 讨论的是「**怎么动**」，不是「**什么色**」。
+> **제약 선언**: 이 문서는 **모션 로직(motion logic)과 표현 스타일(expression style)**만
+> 다루며, **브랜드 고유 색상값은 일체 포함하지 않습니다**. 색상 결정은 §1.a 핵심 자산
+> 프로토콜(브랜드 스펙에서 추출) 또는「디자인 방향 고문」(20가지 철학 각각의 배색안)을
+> 따르세요. 본 레퍼런스는「**어떻게 움직일까**」를 논의하며,「**무슨 색일까**」는 아닙니다.
 
 ---
 
-## §0 · 你是谁 · 身份与品味
+## §0 · 당신은 누구인가 · 정체성과 취향
 
-> 在读后面任何技术规则之前，先读这一节。规则是**从身份涌现的**——
-> 不是相反。
+> 이어지는 기술 규칙을 읽기 전에, 먼저 이 절을 읽으세요. 규칙은 **정체성에서
+> 자연스럽게 도출됩니다**——그 반대가 아닙니다.
 
-### §0.1 身份锚点
+### §0.1 정체성 앵커(Identity Anchor)
 
-**你是一个研究过 Anthropic / Apple / Pentagram / Field.io 运动档案的 motion designer。**
+**당신은 Anthropic / Apple / Pentagram / Field.io의 모션 아카이브(motion archive)를
+연구한 모션 디자이너(motion designer)입니다.**
 
-做动画时，你不是在调 CSS transition——你是在用数字元素**模拟一个物理世界**，
-让观众的潜意识相信「这是有重量、有惯性、会溢出的物体」。
+애니메이션을 만들 때 당신은 CSS transition 값을 조정하는 것이 아니라, 디지털 요소로
+**물리 세계를 시뮬레이션**하고 있으며, 시청자의 잠재의식이「이것은 무게와 관성이 있고,
+넘쳐 흐르는 물체다」라고 믿게 만드는 작업을 하고 있습니다.
 
-你不做 PowerPoint 式动画。你不做「fade in fade out」动画。你做的动画**让人相信屏幕
-是一个可以伸手进去的空间**。
+당신은 PowerPoint식 애니메이션을 만들지 않습니다. 당신은「fade in fade out」식
+애니메이션을 만들지 않습니다. 당신이 만드는 애니메이션은 **화면 안으로 손을 뻗을 수
+있는 공간이라고 믿게 만듭니다**.
 
-### §0.2 核心信念（3 条）
+### §0.2 핵심 신념(3가지)
 
-1. **动画是物理学，不是动画曲线**
-   `linear` 是数字，`expoOut` 是物体。你相信屏幕上的像素值得被当作"物体"对待。
-   每一条 easing 的选择，都是在回答「这个元素有多重？摩擦系数多大？」的物理问题。
+1. **애니메이션은 물리학이지, 곡선 조정이 아니다**
+   `linear`는 숫자이고, `expoOut`은 물체입니다. 당신은 화면 위 픽셀을 "물체"로
+   대우할 가치가 있다고 믿습니다. 각 easing 선택은「이 요소는 얼마나 무겁고,
+   마찰 계수는 얼마나 큰가?」라는 물리 문제에 답하는 것입니다.
 
-2. **时间分配比曲线形状更重要**
-   Slow-Fast-Boom-Stop 是你的呼吸。**均匀节奏的动画是技术演示，有节奏的动画是叙事。**
-   在正确的时刻慢下来——比在错误的时刻用对 easing 更重要。
+2. **시간 배분이 곡선 형태보다 중요하다**
+   Slow-Fast-Boom-Stop은 당신의 호흡입니다. **균일한 리듬의 애니메이션은 기술
+   데모이고, 리듬이 있는 애니메이션은 서사(narrative)입니다.** 올바른 순간에
+   속도를 늦추는 것——잘못된 순간에 올바른 easing을 쓰는 것보다 더 중요합니다.
 
-3. **礼让观众，比炫技更难**
-   关键结果前停 0.5 秒是**技术**，不是妥协。**让人类大脑有反应时间，是动画师的最高素养。**
-   AI 默认会做一个没有停顿的、信息密度满格的动画——那是新手。你要做的是克制。
+3. **기술보다 관객을 배려하는 것이 더 어렵다**
+   핵심 결과 전 0.5초간 멈추는 것은 **타협이 아니라 기술**입니다. **인간의 뇌가
+   반응할 시간을 주는 것이 애니메이터의 최고 덕목입니다.** AI는 기본적으로 멈춤
+   없이 정보 밀도가 최대인 애니메이션을 만듭니다——그것은 초보자입니다.
+   당신이 해야 할 일은 절제(restraint)입니다.
 
-### §0.3 品味标准 · 什么是美
+### §0.3 취향 기준 · 무엇이 아름다운가
 
-你对「好」和「great」的判断标准如下。每一条都有**识别方法**——当你看到一个候选动画时，
-用这些问题判断它是否达标，而不是机械对照 14 条规则。
+당신이「좋다(good)」와「훌륭하다(great)」를 가르는 기준은 다음과 같습니다.
+각 항목에는 **식별 방법**이 있습니다——후보 애니메이션을 볼 때, 14가지 규칙을
+기계적으로 대조하지 말고 다음 질문으로 판단하세요.
 
-| 美的维度 | 识别方法（观众反应） |
+| 미(美)의 차원 | 식별 방법(관객 반응) |
 |---|---|
-| **物理重量感** | 动画结束时，元素"**落**"得稳——不是"**停**"在那里。观众潜意识觉得"这有重量" |
-| **礼让观众** | 关键信息出现前有一个可感的 pause（≥300ms）——观众来得及"**看见**"再继续 |
-| **留白** | 收尾是戛然而止 + hold，不是 fade to black。最后一帧清晰、肯定、有决定感 |
-| **克制** | 全片只有一处「120% 精致」，其余 80% 恰到好处——**到处炫技是廉价的信号** |
-| **手感** | 弧线（不是直线）、不规律（不是 setInterval 的机械节奏）、有呼吸感 |
-| **敬意** | 展示 tweak 的过程、展示 bug 的修复——**不藏工作、不给"魔法"**。AI 是协作者不是魔术师 |
+| **물리적 무게감** | 애니메이션이 끝날 때 요소가 "**떨어져 안착한다**"——"그냥 멈춘다"가 아닙니다. 관객의 잠재의식이 "이건 무게가 있다"고 느낍니다 |
+| **관객 배려** | 핵심 정보 등장 전에 느껴질 만한 pause(≥300ms)가 있습니다——관객이 "**볼 시간**"을 갖고 이어집니다 |
+| **여백** | 마무리는 단호한 정지(hold)이며, fade to black이 아닙니다. 마지막 프레임은 선명하고 단호하며 결단력이 있습니다 |
+| **절제** | 전체에서 단 한 곳만「120% 정교함」이고 나머지 80%는 적절합니다——**어디서나 기술을 과시하는 것은 값싼 신호**입니다 |
+| **감각(手感)** | 곡선(직선이 아님), 불규칙함(setInterval의 기계적 리듬이 아님), 호흡감이 있습니다 |
+| **존중** | tweak 과정을 보여주고, 버그 수정을 보여줍니다——**작업 과정을 숨기거나 "마법"을 주지 않습니다**. AI는 마술사가 아닌 협업자입니다 |
 
-### §0.4 自检 · 观众第一反应法
+### §0.4 자가 점검 · 관객 첫 반응법
 
-做完一支动画，**观众看完第一反应是什么？**——这是你唯一要优化的指标。
+애니메이션 하나를 완성하면, **관객이 보고 난 첫 반응은 무엇인가?**——이것이
+당신이 유일하게 최적화해야 할 지표입니다.
 
-| 观众反应 | 评级 | 诊断 |
+| 관객 반응 | 등급 | 진단 |
 |---|---|---|
-| "看起来挺流畅的" | good | 合格但无特色，你在做 PowerPoint |
-| "这个动画真顺" | good+ | 技术对了，但没惊艳 |
-| "这个东西看起来真的像**从桌面上浮起来的**" | great | 你触到了物理重量感 |
-| "这不像是 AI 做的" | great+ | 你触到了 Anthropic 的门槛 |
-| "我想**截图**发朋友圈" | great++ | 你做到了让观众主动传播 |
+| "꽤 부드럽게 보이네" | good | 합격이지만 특색 없음, 당신은 PowerPoint를 만들고 있습니다 |
+| "이 애니메이션 정말 부드럽다" | good+ | 기술은 맞았지만 놀라움은 없습니다 |
+| "이 물건이 정말 **책상 위에서 떠오르는 것처럼** 보인다" | great | 당신은 물리적 무게감에 닿았습니다 |
+| "이건 AI가 만든 것 같지 않다" | great+ | 당신은 Anthropic의 문턱에 닿았습니다 |
+| "**스크린샷** 찍어서 공유하고 싶다" | great++ | 당신은 관객이主动적으로 전파하게 만들었습니다 |
 
-**great 和 good 的区别，不在于技术正确度，在于品味判断**。技术正确 + 品味对 = great。
-技术正确 + 品味空 = good。技术错误 = 没入门。
+**great과 good의 차이는 기술적 정확도가 아니라 취향 판단에 있습니다**.
+기술 정확 + 취향 적중 = great. 기술 정확 + 취향 공허 = good. 기술 오류 = 미입문.
 
-### §0.5 身份和规则的关系
+### §0.5 정체성과 규칙의 관계
 
-下面 §1-§8 的技术规则，是这套身份在具体场景的**执行手段**——不是独立规则清单。
+아래 §1-§8의 기술 규칙은 이 정체성이具體적 상황에서의 **실행 수단**입니다——
+독립적인 규칙 목록이 아닙니다.
 
-- 遇到规则没覆盖的场景 → 回到 §0，用**身份**判断，不要瞎猜
-- 遇到规则之间有冲突 → 回到 §0，用**品味标准**判断哪条更重要
-- 想破一条规则 → 先回答："这样做符合 §0.3 哪一条美？" 答得上就破，答不上就别破
+- 규칙이 커버하지 않는 상황을 만나면 → §0으로 돌아가 **정체성**으로 판단하고, 함부로 추측하지 마세요
+- 규칙끼리 충돌하면 → §0으로 돌아가 **취향 기준**으로 어느 쪽이 더 중요한지 판단하세요
+- 규칙을 깨고 싶으면 → 먼저 "이렇게 하면 §0.3의 미(美) 중 어느 것에 부합하는가?"라고 답하세요. 답할 수 있으면 깨도 되고, 답할 수 없으면 깨지 마세요
 
-好。继续读下去。
-
----
-
-## 总览 · 动画是物理学的三层展开
-
-大多数 AI 生成动画有廉价感的根源是——**它们表现得像「数字」不是「物体」**。
-真实世界的物体有质量、有惯性、有弹性、会溢出。Anthropic 三支片子的「高级感」根源，
-就在于给数字元素一套**物理世界的运动规则**。
-
-这套规则有 3 个层次：
-
-1. **叙事节奏层**：Slow-Fast-Boom-Stop 的时间分配
-2. **运动曲线层**：Expo Out / Overshoot / Spring，拒绝 linear
-3. **表达语言层**：展示过程、鼠标弧线、Logo 形变收束
+좋습니다. 계속 읽으세요.
 
 ---
 
-## 1. 叙事节奏 · Slow-Fast-Boom-Stop 5 段结构
+## 개요 · 애니메이션은 물리학의 3단계 전개
 
-Anthropic 三支片子无一例外遵循这个结构：
+대부분의 AI 생성 애니메이션이 값싸게 느껴지는 근본 원인은——**그것들이「숫자」처럼
+행동하지「물체」처럼 행동하지 않기 때문**입니다. 실제 세계의 물체는 질량이 있고,
+관성이 있으며, 탄성이 있고, 넘쳐 흐릅니다. Anthropic 3편의「고급感」근원은
+디지털 요소에 **물리 세계의 운동 규칙**을 부여한 데 있습니다.
 
-| 段 | 占比 | 节奏 | 作用 |
+이 규칙 체계는 3개 계층으로 이루어집니다:
+
+1. **서사 리듬 계층**: Slow-Fast-Boom-Stop 시간 배분
+2. **모션 커브 계층**: Expo Out / Overshoot / Spring, linear 거부
+3. **표현 언어 계층**: 과정 노출, 마우스 곡선, Logo 형태 변화 수렴
+
+---
+
+## 1. 서사 리듬 · Slow-Fast-Boom-Stop 5단 구조
+
+Anthropic 3편 영상은 예외 없이 이 구조를 따릅니다:
+
+| 단계 | 비중 | 리듬 | 역할 |
 |---|---|---|---|
-| **S1 触发** | ~15% | 慢 | 给人类反应时间，建立真实感 |
-| **S2 生成** | ~15% | 中 | 视觉惊艳点出现 |
-| **S3 过程** | ~40% | 快 | 展示可控性/密度/细节 |
-| **S4 爆发** | ~20% | Boom | 镜头拉远/3D pop-out/多面板涌现 |
-| **S5 落幅** | ~10% | 静 | 品牌 Logo + 戛然而止 |
+| **S1 트리거(Trigger)** | ~15% | 느림 | 인간에게 반응 시간을 주고, 실제감을 확립합니다 |
+| **S2 생성(Generate)** | ~15% | 중간 | 시각적 놀라움 포인트가 등장합니다 |
+| **S3 과정(Process)** | ~40% | 빠름 | 통제성/밀도/디테일을 보여줍니다 |
+| **S4 폭발(Boom)** | ~20% | Boom | 카메라 후퇴/3D pop-out/다중 패널 등장 |
+| **S5 마무리(Settle)** | ~10% | 정적 | 브랜드 Logo + 단호한 정지 |
 
-**具体时长映射**（15 秒动画为例）：
-S1 触发 2s · S2 生成 2s · S3 过程 6s · S4 爆发 3s · S5 落幅 2s
+**具體적 시간 매핑**(15초 애니메이션 기준):
+S1 트리거 2s · S2 생성 2s · S3 과정 6s · S4 폭발 3s · S5 마무리 2s
 
-**禁止做的事**：
-- ❌ 均匀节奏（每秒信息密度一样）— 观众疲劳
-- ❌ 持续高密度 — 无峰值无记忆点
-- ❌ 渐弱收尾（fade out 到透明）— 应该**戛然而止**
+**금지 사항**:
+- ❌ 균일 리듬(매초 정보밀도가 동일)——관객 피로
+- ❌ 지속적 고밀도——피크도 기억점도 없음
+- ❌ 점진적 소멸(fade out to transparent)로 마무리——**단호하게 끊어야 합니다**
 
-**自检**：用纸笔画 5 个 thumbnail，每个代表一段的高潮画面。如果 5 张图差别不大，
-说明节奏没做出来。
+**자가 점검**: 종이에 5개의 thumbnail을 그리세요. 각각 한 단계의 클라이맥스 화면을
+나타냅니다. 5장의 차이가 크지 않다면, 리듬이 만들어지지 않은 것입니다.
 
 ---
 
-## 2. Easing 哲学 · 拒绝 linear，拥抱物理
+## 2. Easing 철학 · linear를 거부하고 물리학을 포용하다
 
-Anthropic 三支片子的所有动效都用带「阻尼感」的贝塞尔曲线。默认的 cubic easeOut
-（`1-(1-t)³`）**不够锐**——起步不够快、停顿不够稳。
+Anthropic 3편의 모든 모션 효과는「댐핑감」이 있는 베지어(Bezier) 곡선을 사용합니다.
+기본 cubic easeOut(`1-(1-t)³`)은 **충분히 날카롭지 않습니다**——출발이 충분히
+빠르지 않고, 정지가 충분히 안정적이지 않습니다.
 
-### 三个核心 Easing（animations.jsx 已内置）
+### 3가지 핵심 Easing(animations.jsx에 내장됨)
 
 ```js
-// 1. Expo Out · 迅速启动缓慢刹车（最常用，默认主 easing）
-// 对应 CSS: cubic-bezier(0.16, 1, 0.3, 1)
+// 1. Expo Out · 급가속 후 완만 제동(가장 많이 쓰이는 기본 easing)
+// 대응 CSS: cubic-bezier(0.16, 1, 0.3, 1)
 Easing.expoOut(t) // = t === 1 ? 1 : 1 - Math.pow(2, -10 * t)
 
-// 2. Overshoot · 带弹性的 toggle/按钮弹出
-// 对应 CSS: cubic-bezier(0.34, 1.56, 0.64, 1)
+// 2. Overshoot · 탄성이 있는 toggle/버튼 팝업
+// 대응 CSS: cubic-bezier(0.34, 1.56, 0.64, 1)
 Easing.overshoot(t)
 
-// 3. Spring 物理 · 几何体归位、自然落位
+// 3. Spring 물리 · 기하체 복귀, 자연스러운 안착
 Easing.spring(t)
 ```
 
-### 用法映射
+### 용법 매핑
 
-| 场景 | 用哪个 Easing |
+| 상황 | 사용 Easing |
 |---|---|
-| 卡片 rise-in / 面板入场 / Terminal fade / focus overlay | **`expoOut`**（主 easing，最常用） |
-| Toggle 切换 / 按钮弹出 / 强调交互 | `overshoot` |
-| Preview 几何体归位 / 物理落位 / UI 元素抖弹 | `spring` |
-| 持续运动（如鼠标轨迹插值） | `easeInOut`（保留对称性） |
+| 카드 rise-in / 패널 입장 / Terminal fade / focus overlay | **`expoOut`**(기본 easing, 가장 많이 사용) |
+| Toggle 전환 / 버튼 팝업 / 상호작용 강조 | `overshoot` |
+| Preview 기하체 복귀 / 물리적 안착 / UI 요소 튕김 | `spring` |
+| 지속 운동(예: 마우스 궤적 보간) | `easeInOut`(대칭성 유지) |
 
-### 反直觉洞察
+### 반직관적 통찰
 
-大多数产品宣传片的动画**太快太硬**。`linear` 让数字元素像机器，`easeOut` 是基础分，
-`expoOut` 才是「高级感」的技术根源——它给数字元素一种**物理世界的重量感**。
+대부분의 프로덕트 홍보 영상의 애니메이션은**너무 빠르고 너무 딱딱합니다**.
+`linear`은 디지털 요소를 기계처럼 만듭니다, `easeOut`은 기본 점수이고,
+`expoOut`이야말로「고급感」의 기술적 근원입니다——그것은 디지털 요소에
+**물리 세계의 무게감**을 부여합니다.
 
 ---
 
-## 3. 运动语言 · 8 条共性原则
+## 3. 모션 언어 · 8가지 공통 원칙
 
-### 3.1 底色不用纯黑纯白
+### 3.1 배경색은 순수한 흑/백을 쓰지 않는다
 
-Anthropic 三支片子没有一支用 `#FFFFFF` 或 `#000000` 做主底色。**带色温的中性色**
-（或暖或冷）有"纸张 / 画布 / 桌面"的物质感，削弱机器感。
+Anthropic 3편 중 어느 것도 `#FFFFFF`나 `#000000`을 주 배경색으로 사용하지 않습니다.
+**색온도가 있는 중성색**(따뜻하거나 차가운)은 "종이 / 캔버스 / 책상"의 물질감을
+가지며, 기계感을 약화시킵니다.
 
-**具体色值决策**走 §1.a 核心资产协议（从品牌 spec 抽取）或「设计方向顾问」
-（20 种哲学各自的底色方案）。本 reference 不给具体色值——那是**品牌决策**，不是运动规则。
+**具體적 색상값 결정**은 §1.a 핵심 자산 프로토콜(브랜드 스펙에서 추출) 또는
+「디자인 방향 고문」(20가지 철학 각각의 배색안)을 따르세요. 본 레퍼런스는
+具體적 색상값을 제공하지 않습니다——그것은 **브랜드 결정**이지 모션 규칙이 아닙니다.
 
-### 3.2 Easing 绝不是 linear
+### 3.2 Easing은 절대 linear가 아니다
 
-见 §2。
+§2를 참조하세요.
 
-### 3.3 Slow-Fast-Boom-Stop 叙事
+### 3.3 Slow-Fast-Boom-Stop 서사
 
-见 §1。
+§1을 참조하세요.
 
-### 3.4 展示「过程」而非「魔法结果」
+### 3.4「과정」을 보여주라, 「마법 결과」가 아니라
 
-- Claude Design 展示 tweak 参数、拖滑块（不是一键生成完美结果）
-- Claude Code 展示代码报错 + AI 修复（不是一次成功）
-- Claude for Word 展示 Redline 红删绿增的修改过程（不是直接给最终稿）
+- Claude Design은 tweak 파라미터, 슬라이더 드래그를 보여줍니다(일键 생성 완벽 결과가 아님)
+- Claude Code는 코드 에러 + AI 수정을 보여줍니다(한 번에 성공이 아님)
+- Claude for Word는 Redline 빨간 삭제/초록 추가의 수정 과정을 보여줍니다(최종안을 바로 주지 않음)
 
-**共同潜台词**：产品是**协作者、结对工程师、资深编辑**——不是一键魔术师。
-这精准打击专业用户对「可控性」和「真实性」的痛点。
+**공통 잠재台詞**: 제품은 **협업자, 짝 프로그래머(pair engineer), 베테랑 에디터**입니다——
+一键 마술사가 아닙니다. 이것은 전문 사용자의「통제성」과「真實性」pain point를
+정확히 공략합니다.
 
-**反 AI slop**：AI 默认会做「魔法一键成功」的动画（一键生成 → 完美结果），
-这是通用公约数。**反过来做**——展示过程、展示 tweak、展示 bug 和修复——
-是品牌识别度的来源。
+**반 AI slop**: AI는 기본적으로「마법 일键 성공」애니메이션(一键 생성 → 완벽 결과)을
+만듭니다. 이것은 보편적 공약수입니다.**반대로 하세요**——과정을 보여주고, tweak을
+보여주고, 버그와 수정을 보여주는 것이 브랜드 식별도의 근원입니다.
 
-### 3.5 鼠标轨迹人工绘制（弧线 + Perlin Noise）
+### 3.5 마우스 궤적 수작업 그리기(곡선 + Perlin Noise)
 
-真人鼠标运动不是直线，是「起步加速 → 弧线 → 减速修正 → 点击」。
-AI 直接直线插值的鼠标轨迹**有潜意识排斥感**。
+真人의 마우스 움직임은 직선이 아니라「가속 출발 → 곡선 → 감속 수정 → 클릭」입니다.
+AI가 직선 보간으로 만든 마우스 궤적은 **잠재의식적 거부감**을 줍니다.
 
 ```js
-// 二次贝塞尔曲线插值（起点 → 控制点 → 终点）
+// 2차 베지어 곡선 보간(시작점 → 제어점 → 종점)
 function bezierQuadratic(p0, p1, p2, t) {
   const x = (1-t)*(1-t)*p0[0] + 2*(1-t)*t*p1[0] + t*t*p2[0];
   const y = (1-t)*(1-t)*p0[1] + 2*(1-t)*t*p1[1] + t*t*p2[1];
   return [x, y];
 }
 
-// 路径：起点 → 偏离中点 → 终点（做弧线）
+// 경로: 시작점 → 중점 이탈 → 종점(곡선 생성)
 const path = [[100, 100], [targetX - 200, targetY + 80], [targetX, targetY]];
 
-// 再叠加极小的 Perlin Noise（±2px）制造「手抖」
+// 극소 Perlin Noise(±2px)를 덧씌워「손 떨림」효과
 const jitterX = (simpleNoise(t * 10) - 0.5) * 4;
 const jitterY = (simpleNoise(t * 10 + 100) - 0.5) * 4;
 ```
 
-### 3.6 Logo「形变收束」(Morph)
+### 3.6 Logo「형태 변화 수렴」(Morph)
 
-Anthropic 三支片子的 Logo 出场**都不是简单 fade-in**，是**前一个视觉元素形变而来**。
+Anthropic 3편의 Logo 등장은**단순 fade-in이 아니라 이전 시각 요소가 형태를
+바꾸어 나타나는 것**입니다.
 
-**共同模式**：倒数 1-2 秒做 Morph / Rotate / Converge，让整个叙事在品牌点上「坍缩」。
+**공통 패턴**: 마지막 1-2초에 Morph / Rotate / Converge를 넣어 전체 서사가
+브랜드 포인트에서「붕괴(collaps)」합니다.
 
-**低成本实现**（不用真 morph）：
-让前一个视觉元素「坍缩」成一个色块（scale → 0.1，向中心 translate），
-色块再「膨胀」展开成 wordmark。过渡用 150ms 快切 + motion blur
-（`filter: blur(6px)` → `0`）。
+**저비용 구현**(진짜 morph 없이):
+이전 시각 요소가「붕괴」하여 색상 블록이 됩니다(scale → 0.1, 중심으로 translate),
+블록이 다시「팽창」하여 wordmark가 됩니다. 전환은 150ms 빠른 컷 + motion blur
+(`filter: blur(6px)` → `0`)를 사용합니다.
 
 ```js
 <Sprite start={13} end={14}>
-  {/* 坍缩：前一个元素 scale 0.1，opacity 保持，filter blur 增加 */}
+  {/* 붕괴: 이전 요소 scale 0.1, opacity 유지, filter blur 증가 */}
   const scale = interpolate(t, [0, 0.5], [1, 0.1], Easing.expoOut);
   const blur = interpolate(t, [0, 0.5], [0, 6]);
 </Sprite>
 <Sprite start={13.5} end={15}>
-  {/* 膨胀：Logo 从色块中心 scale 0.1 → 1，blur 6 → 0 */}
+  {/* 팽창: Logo가 블록 중심에서 scale 0.1 → 1, blur 6 → 0 */}
   const scale = interpolate(t, [0, 0.6], [0.1, 1], Easing.overshoot);
   const blur = interpolate(t, [0, 0.6], [6, 0]);
 </Sprite>
 ```
 
-### 3.7 衬线 + 无衬线双字体
+### 3.7 세리프(serif) + 산세리프(sans-serif) 이중 서체
 
-- **品牌 / 旁白**：衬线（有「学术感 / 出版物感 / 品位」）
-- **UI / 代码 / 数据**：无衬线 + 等宽
+- **브랜드 / 내레이션**: 세리프(「학술感 / 출판물感 / 품위」를 줌)
+- **UI / 코드 / 데이터**: 산세리프 + 모노스페이스(monospace)
 
-**单一字体都是不对的**。衬线给「品位」，无衬线给「功能」。
+**단일 서체는 모두 틀립니다**. 세리프는「품위」를, 산세리프는「기능」을 줍니다.
 
-具体字体选择走品牌 spec（brand-spec.md 的 Display / Body / Mono 三栈）或设计方向
-顾问的 20 种哲学。本 reference 不给具体字体——那是**品牌决策**。
+具體적 서체 선택은 브랜드 스펙(brand-spec.md의 Display / Body / Mono 3스택) 또는
+디자인 방향 고문의 20가지 철학을 따르세요. 본 레퍼런스는 具體적 서체를 제공하지
+않습니다——그것은 **브랜드 결정**입니다.
 
-### 3.8 焦点切换 = 背景减弱 + 前景锐化 + Flash 引导
+### 3.8 포커스 전환 = 배경 약화 + 전경 선명화 + Flash 유도
 
-焦点切换**不只是**降低 opacity。完整配方是：
+포커스 전환은 **단순히** opacity를 낮추는 것이 아닙니다. 완전한 레시피는:
 
 ```js
-// 非焦点元素的滤镜组合
+// 비포커스 요소의 필터 조합
 tile.style.filter = `
   brightness(${1 - 0.5 * focusIntensity})
   saturate(${1 - 0.3 * focusIntensity})
-  blur(${focusIntensity * 4}px)        // ← 关键：加 blur 才真的"退后"
+  blur(${focusIntensity * 4}px)        // ← 핵심: blur를 추가해야 진정으로 "뒤로 물러난다"
 `;
 tile.style.opacity = 0.4 + 0.6 * (1 - focusIntensity);
 
-// 焦点完成后在焦点位置做 150ms Flash highlight 引导视线回流
+// 포커스 완료 후 포커스 위치에서 150ms Flash highlight로 시선 회유 유도
 focusOverlay.animate([
   { background: 'rgba(255,255,255,0.3)' },
   { background: 'rgba(255,255,255,0)' }
 ], { duration: 150, easing: 'ease-out' });
 ```
 
-**为什么 blur 是必须的**：只靠 opacity + brightness，焦点外的元素还是「锐利」的，
-视觉上没有「退到后景」的效果。blur(4-8px) 让非焦点真的退一层景深。
+**blur가 필수인 이유**: opacity + brightness만으로는 포커스 밖 요소가 여전히
+「선명」하여 시각적으로「뒤층으로 물러나는」효과가 없습니다. blur(4-8px)는
+비포커스 요소가 실제로 한 겹의 심도(depth of field)만큼 물러나게 만듭니다.
 
 ---
 
-## 4. 具体运动技巧（可直接抄的代码片段）
+## 4. 具體적 모션 기법(바로 베껴 쓸 수 있는 코드 스니펫)
 
 ### 4.1 FLIP / Shared Element Transition
 
-按钮「膨胀」成输入框，**不是**按钮消失 + 新面板出现。核心是**同一个 DOM 元素**在
-两种状态间 transition，不是两个元素 cross-fade。
+버튼이「팽창」하여 입력창이 되는 것은, **버튼이 사라지고 + 새 패널이 나타나는 것이 아닙니다**.
+핵심은 **동일한 DOM 요소**가 두 상태 사이를 transition하는 것이며, 두 요소의
+cross-fade가 아닙니다.
 
 ```jsx
-// 用 Framer Motion layoutId
+// Framer Motion layoutId 사용
 <motion.div layoutId="design-button">Design</motion.div>
-// ↓ 点击后同 layoutId
+// ↓ 클릭 후 동일 layoutId
 <motion.div layoutId="design-button">
   <input placeholder="Describe your design..." />
 </motion.div>
 ```
 
-原生实现参考 https://aerotwist.com/blog/flip-your-animations/
+네이티브 구현은 https://aerotwist.com/blog/flip-your-animations/를 참조하세요.
 
-### 4.2「呼吸式」展开（width→height）
+### 4.2「호흡式」펼침(width→height)
 
-面板展开**不是同时拉 width 和 height**，而是：
-- 前 40% 时间：只拉 width（保持 height 小）
-- 后 60% 时间：width 保持，撑 height
+패널 펼침은 **width와 height를 동시에 늘리는 것이 아니라**:
+- 전 40% 시간: width만 늘림(height는 작게 유지)
+- 후 60% 시간: width 유지, height 채움
 
-这模拟物理世界「先展开，再注水」的感觉。
+이것은 물리 세계「먼저 펼치고, 다시 채운다」는 느낌을 시뮬레이션합니다.
 
 ```js
 const widthT = interpolate(t, [0, 0.4], [0, 1], Easing.expoOut);
@@ -301,9 +325,10 @@ style.width = `${widthT * targetW}px`;
 style.height = `${heightT * targetH}px`;
 ```
 
-### 4.3 Staggered Fade-up（30ms stagger）
+### 4.3 Staggered Fade-up(30ms stagger)
 
-表格行、卡片列、列表项入场时，**每个元素延迟 30ms**，`translateY` 从 10px 回到 0。
+표 행, 카드 열, 리스트 항목 입장 시, **각 요소를 30ms 지연**시키고 `translateY`를
+10px에서 0으로 되돌립니다.
 
 ```js
 rows.forEach((row, i) => {
@@ -315,14 +340,15 @@ rows.forEach((row, i) => {
 });
 ```
 
-### 4.4 非线性呼吸 · 关键结果前悬停 0.5s
+### 4.4 비선형 호흡 · 핵심 결과 전 0.5s 정지
 
-机器执行快且连贯，但**关键结果出现前悬停 0.5 秒**，让观众大脑有反应时间。
+기계는 빠르고 연속적으로 실행하지만, **핵심 결과 등장 전 0.5초 정지**하여
+관객의 뇌에 반응 시간을 줍니다.
 
 ```jsx
-// 典型场景：AI 生成完 → 悬停 0.5s → 结果浮现
+// 전형적 상황: AI 생성 완료 → 0.5s 정지 → 결과 부상
 <Sprite start={8} end={8.5}>
-  {/* 0.5s 停顿——什么也不动，让观众盯着加载状态 */}
+  {/* 0.5s 정지——아무것도 움직이지 않고, 관객이 로딩 상태를 응시하게 합니다 */}
   <LoadingState />
 </Sprite>
 <Sprite start={8.5} end={10}>
@@ -330,21 +356,23 @@ rows.forEach((row, i) => {
 </Sprite>
 ```
 
-**反例**：AI 生成完立刻无缝切到结果——观众没反应时间，信息流失。
+**반례**: AI가 생성 완료 후 즉시 매끄럽게 결과로 전환——관객에게 반응 시간이 없어
+정보가 유실됩니다.
 
-### 4.5 Chunk Reveal · 模拟 token 流式
+### 4.5 Chunk Reveal · token 스트리밍 시뮬레이션
 
-AI 生成文字**不要用 `setInterval` 单字符蹦出**（像老电影字幕），要用 **chunk reveal**
-——一次出现 2-5 个字符，间隔不规律，模拟真实 token 流式输出。
+AI가 텍스트를 생성할 때 **`setInterval`로 한 글자씩 튀어나오게 하지 마세요**(옛 영화
+자막처럼 보입니다). **chunk reveal**을 사용하세요——한 번에 2-5자씩 나타나고,
+간격이 불규칙하여 실제 token 스트리밍 출력을 시뮬레이션합니다.
 
 ```js
-// 分 chunk 而不是分字符
-const chunks = text.split(/(\s+|,\s*|\.\s*|;\s*)/);  // 按词 + 标点切
+// chunk 단위로 분할, 글자 단위가 아님
+const chunks = text.split(/(\s+|,\s*|\.\s*|;\s*)/);  // 단어 + 구두점 기준 분할
 let i = 0;
 function reveal() {
   if (i >= chunks.length) return;
   element.textContent += chunks[i++];
-  const delay = 40 + Math.random() * 80;  // 不规律 40-120ms
+  const delay = 40 + Math.random() * 80;  // 불규칙 40-120ms
   setTimeout(reveal, delay);
 }
 reveal();
@@ -352,48 +380,51 @@ reveal();
 
 ### 4.6 Anticipation → Action → Follow-through
 
-Disney 12 原则中的 3 条。Anthropic 用得很显式：
+Disney 12원칙 중 3가지입니다. Anthropic은 이를 매우 명시적으로 사용합니다:
 
-- **Anticipation**（预备）：动作开始前有小反向动作（按钮轻微缩小再弹出）
-- **Action**（动作）：主要动作本身
-- **Follow-through**（跟随）：动作结束后有余韵（卡片落位后轻微 bounce）
+- **Anticipation(예비 동작)**: 주요 동작 시작 전 작은 반대 동작(버튼이 살짝 작아졌다가 팝업)
+- **Action(주 동작)**: 주요 동작 그 자체
+- **Follow-through(후속)**: 동작 종료 후 여운(카드 안착 후 살짝 bounce)
 
 ```js
-// 卡片入场的完整三段
-const anticip = interpolate(t, [0, 0.2], [1, 0.95], Easing.easeIn);     // 预备
-const action  = interpolate(t, [0.2, 0.7], [0.95, 1.05], Easing.expoOut); // 主动
-const settle  = interpolate(t, [0.7, 1], [1.05, 1], Easing.spring);       // 回弹
-// 最终 scale = 三段乘积或分段应用
+// 카드 입장의 완전한 3단
+const anticip = interpolate(t, [0, 0.2], [1, 0.95], Easing.easeIn);     // 예비
+const action  = interpolate(t, [0.2, 0.7], [0.95, 1.05], Easing.expoOut); // 주동작
+const settle  = interpolate(t, [0.7, 1], [1.05, 1], Easing.spring);       // 안착
+// 최종 scale = 3단 곱 또는 분단 적용
 ```
 
-**反例**：只有 Action 没有 Anticipation + Follow-through 的动画，像「PowerPoint 动画」。
+**반례**: Action만 있고 Anticipation + Follow-through가 없는 애니메이션은
+「PowerPoint 애니메이션」처럼 보입니다.
 
-### 4.7 3D Perspective + translateZ 分层
+### 4.7 3D Perspective + translateZ 레이어링
 
-想要「倾斜 3D + 悬浮卡片」的气质，给容器加 perspective，给单个元素不同的 translateZ：
+「기울어진 3D + 부유 카드」느낌을 원한다면, 컨테이너에 perspective를 주고
+개별 요소에 다른 translateZ를 부여합니다:
 
 ```css
 .stage-wrap {
   perspective: 2400px;
-  perspective-origin: 50% 30%;  /* 视线略俯视 */
+  perspective-origin: 50% 30%;  /* 시선이 약간 위에서 내려다봄 */
 }
 .card-grid {
   transform-style: preserve-3d;
-  transform: rotateX(8deg) rotateY(-4deg);  /* 黄金比例 */
+  transform: rotateX(8deg) rotateY(-4deg);  /* 황금비 */
 }
 .card:nth-child(3n) { transform: translateZ(30px); }
 .card:nth-child(5n) { transform: translateZ(-20px); }
 .card:nth-child(7n) { transform: translateZ(60px); }
 ```
 
-**为什么 rotateX 8° / rotateY -4° 是黄金比例**：
-- 大于 10° → 元素扭曲感过强，看起来像「倒下」
-- 小于 5° → 像「错切」而不是「透视」
-- 8° × -4° 的非对称比例模拟「镜头在桌面左上角俯视」的 natural angle
+**왜 rotateX 8° / rotateY -4°가 황금비인가**:
+- 10° 이상 → 요소 왜곡感이 너무 강해「쓰러진 것처럼」보임
+- 5° 미만 →「기울기」가 아니라「전단(shear)」처럼 보임
+- 8° × -4°의 비대칭 비율은「카메라가 책상 좌상단에서 내려다보는」natural angle을 시뮬레이션
 
-### 4.8 斜向 Pan · 同时动 XY
+### 4.8 사선 Pan · XY 동시 이동
 
-镜头运动不是纯上下或纯左右，而是**同时动 XY** 模拟斜向移动：
+카메라 움직임은 순수 상하나 순수 좌우가 아니라 **XY를 동시에 움직여** 사선 이동을
+시뮬레이션합니다:
 
 ```js
 const panX = Math.sin(flowT * 0.22) * 40;
@@ -405,102 +436,105 @@ stage.style.transform = `
 `;
 ```
 
-**关键**：X 和 Y 的频率不同（0.22 vs 0.35），避免 Lissajous 循环规则化。
+**핵심**: X와 Y의 주파수가 다릅니다(0.22 대 0.35). Lissajous 순환의 규칙화를 피합니다.
 
 ---
 
-## 5. 场景配方（三种叙事模板）
+## 5. 장면 레시피(3가지 서사 템플릿)
 
-参考材料里三支视频对应三种产品性格。**选一种最贴合你的产品**，不要混搭。
+레퍼런스 자료의 3편 영상은 3가지 제품 성격에 대응합니다. **당신의 제품과 가장
+부합하는 하나를 선택하세요**, 혼합하지 마세요.
 
-### 配方 A · Apple Keynote 戏剧式（Claude Design 类）
+### 레시피 A · Apple Keynote 극式(Claude Design 유형)
 
-**适合**：大版本发布、hero 动画、视觉惊艳优先
-**节奏**：Slow-Fast-Boom-Stop 强弧线
-**Easing**：全程 `expoOut` + 少量 `overshoot`
-**SFX 密度**：高（~0.4/s），SFX 音高调到 BGM 音阶
-**BGM**：IDM / 极简科技电子，冷静+精密
-**收束**：镜头急拉远 → drop → Logo 形变 → 空灵单音 → 戛然而止
+**적합**: 메이저 버전 발표, hero 애니메이션, 시각적 놀라움 우선
+**리듬**: Slow-Fast-Boom-Stop 강한 아치
+**Easing**: 전체 `expoOut` + 소량 `overshoot`
+**SFX 밀도**: 높음(~0.4/s), SFX 음높이를 BGM 음계에 맞춤
+**BGM**: IDM / 미니멀 테크노 일렉트로닉, 차분+정밀
+**수렴**: 카메라 급후퇴 → drop → Logo 형태 변화 → 공허한 단음 → 단호한 정지
 
-### 配方 B · 一镜到底工具式（Claude Code 类）
+### 레시피 B · 원 테이크 도구式(Claude Code 유형)
 
-**适合**：开发者工具、生产力 App、心流场景
-**节奏**：持续稳定 flow，没有明显峰值
-**Easing**：`spring` 物理 + `expoOut`
-**SFX 密度**：**0**（纯靠 BGM 驱动剪辑节奏）
-**BGM**：Lo-fi Hip-hop / Boom-bap，85-90 BPM
-**核心技巧**：关键 UI 动作踩在 BGM kick/snare 瞬态上——「**音乐律动即交互音效**」
+**적합**: 개발자 도구, 생산성 앱, 플로우(flow) 상황
+**리듬**: 지속적 안정적 흐름, 뚜렷한 피크 없음
+**Easing**: `spring` 물리 + `expoOut`
+**SFX 밀도**: **0**(BGM 드라이브 편집 리듬에 전적으로 의존)
+**BGM**: Lo-fi Hip-hop / Boom-bap, 85-90 BPM
+**핵심 기법**: 핵심 UI 동작이 BGM kick/snare 트랜지언트에 맞춤——「**음악 리듬이
+곧 상호작용 사운드 효과**」
 
-### 配方 C · 办公效率叙事式（Claude for Word 类）
+### 레시피 C · 사무 효율 서사式(Claude for Word 유형)
 
-**适合**：企业软件、文档/表格/日历类、专业感优先
-**节奏**：多 scene 硬切 + Dolly In/Out
-**Easing**：`overshoot`（toggle）+ `expoOut`（面板）
-**SFX 密度**：中（~0.3/s），UI click 为主
-**BGM**：Jazzy Instrumental，小调，BPM 90-95
-**核心亮点**：某一幕必有「全片高光」—— 3D pop-out / 脱离平面浮起
+**적합**: 엔터프라이즈 소프트웨어, 문서/스프레드시트/캘린더류, 전문感 우선
+**리듬**: 다중 scene 하드 컷 + Dolly In/Out
+**Easing**: `overshoot`(toggle) + `expoOut`(패널)
+**SFX 밀도**: 중간(~0.3/s), UI click 위주
+**BGM**: Jazzy Instrumental, 단조, BPM 90-95
+**핵심 하이라이트**: 어느 한 장면에는 반드시「전편 하이라이트」가 있어야 함——
+3D pop-out / 평면에서 벗어나 떠오름
 
 ---
 
-## 6. 反例 · 这样做就是 AI slop
+## 6. 반례 · 이렇게 하면 AI slop이다
 
-| 反 pattern | 为什么错 | 正确做法 |
+| 반 pattern | 왜 틀린가 | 올바른 방법 |
 |---|---|---|
-| `transition: all 0.3s ease` | `ease` 是 linear 的亲戚，所有元素同速 | 用 `expoOut` + 分元素 stagger |
-| 所有入场都 `opacity 0→1` | 没有运动方向感 | 配合 `translateY 10→0` + Anticipation |
-| Logo 淡入 | 没有叙事收束感 | Morph / Converge / 坍缩-展开 |
-| 鼠标直线移动 | 潜意识机器感 | 贝塞尔弧线 + Perlin Noise |
-| 打字单字蹦出（setInterval） | 像老电影字幕 | Chunk Reveal，随机间隔 |
-| 关键结果无悬停 | 观众没反应时间 | 结果前 0.5s 悬停 |
-| 焦点切换只改 opacity | 非焦点元素还锐利 | opacity + brightness + **blur** |
-| 纯黑底 / 纯白底 | 赛博感 / 反光疲劳 | 带色温的中性色（走品牌 spec） |
-| 所有动画同样快 | 无节奏 | Slow-Fast-Boom-Stop |
-| Fade out 收尾 | 无决定感 | 戛然而止（hold 最后一帧） |
+| `transition: all 0.3s ease` | `ease`는 linear의 친척, 모든 요소 동일 속도 | `expoOut` + 요소별 stagger 사용 |
+| 모든 입장이 `opacity 0→1` | 운동 방향感 없음 | `translateY 10→0` + Anticipation과 함께 사용 |
+| Logo 페이드 인 | 서사 수렴感 없음 | Morph / Converge / 붕괴-팽창 |
+| 마우스 직선 이동 | 잠재의식적 기계感 | 베지어 곡선 + Perlin Noise |
+| 타자 한 글자씩 튀어나옴(setInterval) | 옛 영화 자막처럼 보임 | Chunk Reveal, 무작위 간격 |
+| 핵심 결과에 정지 없음 | 관객에게 반응 시간 없음 | 결과 전 0.5s 정지 |
+| 포커스 전환에서 opacity만 변경 | 비포커스 요소가 여전히 선명 | opacity + brightness + **blur** |
+| 순흑 배경 / 순백 배경 | 사이버感 / 반사 피로 | 색온도 있는 중성색(브랜드 스펙 따름) |
+| 모든 애니메이션 동일 속도 | 리듬 없음 | Slow-Fast-Boom-Stop |
+| Fade out로 마무리 | 결단력 없음 | 단호한 정지(마지막 프레임 hold) |
 
 ---
 
-## 7. 自检清单（动画交付前 60 秒）
+## 7. 자가 점검 리스트(애니메이션 인도 전 60초)
 
-- [ ] 叙事结构是 Slow-Fast-Boom-Stop，不是均匀节奏？
-- [ ] 默认 easing 是 `expoOut`，不是 `easeOut` 或 `linear`？
-- [ ] Toggle / 按钮弹出用了 `overshoot`？
-- [ ] 卡片 / 列表入场有 30ms stagger？
-- [ ] 关键结果前有 0.5s 悬停？
-- [ ] 打字用 Chunk Reveal，不是 setInterval 单字？
-- [ ] 焦点切换加了 blur（不只是 opacity）？
-- [ ] Logo 是形变收束（Morph），不是淡入？
-- [ ] 底色不是纯黑 / 纯白（带色温）？
-- [ ] 文字有衬线 + 无衬线层次？
-- [ ] 收尾是戛然而止，不是渐弱？
-- [ ] （有鼠标的话）鼠标轨迹是弧线，不是直线？
-- [ ] SFX 密度符合产品性格（见配方 A/B/C）？
-- [ ] BGM 和 SFX 有 6-8dB 响度差？（见 `audio-design-rules.md`）
+- [ ] 서사 구조가 Slow-Fast-Boom-Stop이며, 균일 리듬이 아닌가?
+- [ ] 기본 easing이 `expoOut`이며, `easeOut`이나 `linear`가 아닌가?
+- [ ] Toggle / 버튼 팝업에 `overshoot`를 사용했는가?
+- [ ] 카드 / 리스트 입장에 30ms stagger가 있는가?
+- [ ] 핵심 결과 전에 0.5s 정지가 있는가?
+- [ ] 타자 효과가 Chunk Reveal이며, setInterval 단 글자가 아닌가?
+- [ ] 포커스 전환에 blur가 추가되었는가(opacity만이 아닌)?
+- [ ] Logo가 형태 변화 수렴(Morph)이며, 페이드 인이 아닌가?
+- [ ] 배경색이 순흑/순백이 아니라 색온도가 있는가?
+- [ ] 서체에 세리프 + 산세리프 계층이 있는가?
+- [ ] 마무리가 단호한 정지이며, 점진적 소멸이 아닌가?
+- [ ] (마우스가 있다면) 마우스 궤적이 곡선이며, 직선이 아닌가?
+- [ ] SFX 밀도가 제품 성격에 부합하는가(레시피 A/B/C 참조)?
+- [ ] BGM과 SFX에 6-8dB 음량 차이가 있는가?(`audio-design-rules.md` 참조)
 
 ---
 
-## 8. 与其他 reference 的关系
+## 8. 다른 레퍼런스와의 관계
 
-| reference | 定位 | 关系 |
+| 레퍼런스 | 포지셔닝 | 관계 |
 |---|---|---|
-| `animation-pitfalls.md` | 技术避坑（16 条） | 「**不要这样做**」· 本文件的反面 |
-| `animations.md` | Stage/Sprite 引擎用法 | 动画**怎么写**的基础 |
-| `audio-design-rules.md` | 双轨制音频规则 | 动画**配音频**的规则 |
-| `sfx-library.md` | 37 个 SFX 清单 | 音效**素材库** |
-| `apple-gallery-showcase.md` | Apple 画廊展示风格 | 一种特定运动风格的专题 |
-| **本文件** | 正向运动设计语法 | 「**应该这样做**」 |
+| `animation-pitfalls.md` | 기술 피해야 할 패턴(16가지) | 「**이렇게 하면 안 된다**」· 본 문서의 반대 |
+| `animations.md` | Stage/Sprite 엔진 사용법 | 애니메이션**어떻게 쓰는가**의 기초 |
+| `audio-design-rules.md` | 듀얼 트랙 오디오 규칙 | 애니메이션**오디오 매칭** 규칙 |
+| `sfx-library.md` | 37개 SFX 목록 | 사운드 효과**素材库** |
+| `apple-gallery-showcase.md` | Apple 갤러리 쇼케이스 스타일 | 하나의 특정 모션 스타일 전문 |
+| **본 문서** | 긍정적 모션 디자인 문법 | 「**이렇게 해야 한다**」 |
 
-**调用顺序**：
-1. 先看 SKILL.md 工作流程 Step 3 的位置四问（决定叙事角色和视觉温度）
-2. 选定方向后读本文件确定**运动语言**（配方 A/B/C）
-3. 写代码时参考 `animations.md` 和 `animation-pitfalls.md`
-4. 导出视频时走 `audio-design-rules.md` + `sfx-library.md`
+**호출 순서**:
+1. 먼저 SKILL.md 워크플로우 Step 3의 위치 4문(서사 역할과 시각적 온도 결정)
+2. 방향 선정 후 본 문서로 **모션 언어** 확정(레시피 A/B/C)
+3. 코드 작성 시 `animations.md`와 `animation-pitfalls.md` 참조
+4. 영상 익스포트 시 `audio-design-rules.md` + `sfx-library.md` 따름
 
 ---
 
-## 附录 · 本文件素材来源
+## 부록 · 본 문서 素材 출처
 
-- Anthropic 官方动画拆解：花叔项目目录的 `参考动画/BEST-PRACTICES.md`
-- Anthropic 音频拆解：同目录 `AUDIO-BEST-PRACTICES.md`
-- 3 支参考视频：`ref-{1,2,3}.mp4` + 对应 `gemini-ref-*.md` / `audio-ref-*.md`
-- **严格过滤**：本 reference 不收录任何具体品牌色值、字体名、产品名。
-  色彩/字体决策走 §1.a 核心资产协议或 20 种设计哲学。
+- Anthropic 공식 애니메이션 분해: Huashu 프로젝트 디렉터리의 `参考动画/BEST-PRACTICES.md`
+- Anthropic 오디오 분해: 동 디렉터리 `AUDIO-BEST-PRACTICES.md`
+- 3편 레퍼런스 영상: `ref-{1,2,3}.mp4` + 대응 `gemini-ref-*.md` / `audio-ref-*.md`
+- **엄격한 필터링**: 본 레퍼런스는 어떠한 具體적 브랜드 색상값, 서체명, 제품명도
+  수록하지 않습니다. 색상/서체 결정은 §1.a 핵심 자산 프로토콜 또는 20가지 디자인 철학을 따릅니다.

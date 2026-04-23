@@ -1,40 +1,40 @@
-# Apple Gallery Showcase · 画廊展示墙动画风格
+# Apple Gallery Showcase · 갤러리 전시墙 애니메이션 스타일
 
-> 灵感来源：Claude Design 官网 hero 视频 + 苹果产品页「作品墙」式陈列
-> 实战出处：huashu-design 发布 hero v5
-> 适用场景：**产品发布 hero 动画、skill 能力演示、作品集展示**——任何需要把「多件高质量产出」同时展陈并引导观众注意力的场景
-
----
-
-## 触发判断：什么时候用这个风格
-
-**适合**：
-- 有10张以上真实产出要同屏展示（PPT、App、网页、信息图）
-- 观众是专业受众（开发者、设计师、产品经理），对「质感」敏感
-- 希望传递的气质是「克制、展览式、高级、有空间感」
-- 需要焦点和全局同时存在（看细节但不失整体）
-
-**不适合**：
-- 单产品聚焦（用 frontend-design 的产品 hero 模板）
-- 情绪向/故事性强的动画（用时间轴叙事模板）
-- 小屏幕 / 竖屏（倾斜视角在小画面上会糊）
+> 영감 출처: Claude Design 공식 사이트 hero 비디오 + Apple 제품 페이지 '작품墙'식 배열
+> 실전 출처: huashu-design 발표 hero v5
+> 적용 상황: **제품 발표 hero 애니메이션, skill 능력 시연, 포트폴리오 전시**——여러 개의 고품질 결과물을 동시에 보여주며 관객의 시선을 유도해야 하는 모든 상황
 
 ---
 
-## 核心视觉 Token
+## 트리거 판단: 언제 이 스타일을 쓸 것인가
+
+**적합**:
+- 10장 이상의 실제 결과물을 동일 화면에 보여줘야 할 때 (PPT, App, 웹페이지, 인포그래픽)
+- 관객이 전문 대상(개발자, 디자이너, 프로덕트 매니저)이며 '질감'에 민감할 때
+- 전달하고자 하는 분위기가 '절제, 전시식, 고급, 공간감'일 때
+- 포커스와 전체가 동시에 존재해야 할 때(디테일을 보지만 전체를 잃지 않음)
+
+**부적합**:
+- 단일 제품 집중(frontend-design의 제품 hero 템플릿 사용)
+- 감정 중심/스토리텔링 중심 애니메이션(타임라인 낟엇 템플릿 사용)
+- 소형 화면 / 세로 화면(기울어진 시각이 작은 화면에서는 흐릿해짐)
+
+---
+
+## 핵심 비주얼 토큰(Token)
 
 ```css
 :root {
-  /* 浅色画廊调板 */
-  --bg:         #F5F5F7;   /* 主画布底 — 苹果官网灰 */
-  --bg-warm:    #FAF9F5;   /* 温暖米白变体 */
-  --ink:        #1D1D1F;   /* 主字色 */
+  /* 밝은 갤러리 팔레트 */
+  --bg:         #F5F5F7;   /* 메인 캔버스 배경 — Apple 공식 그레이 */
+  --bg-warm:    #FAF9F5;   /* 따뜻한 오프화이트 변형 */
+  --ink:        #1D1D1F;   /* 메인 텍스트 색 */
   --ink-80:     #3A3A3D;
   --ink-60:     #545458;
-  --muted:      #86868B;   /* 次级文字 */
+  --muted:      #86868B;   /* 보조 텍스트 */
   --dim:        #C7C7CC;
-  --hairline:   #E5E5EA;   /* 卡片1px边框 */
-  --accent:     #D97757;   /* 赤陶橙 — Claude brand */
+  --hairline:   #E5E5EA;   /* 카드 1px 테두리 */
+  --accent:     #D97757;   /* 테라코타 오렌지 — Claude 브랜드 */
   --accent-deep:#B85D3D;
 
   --serif-cn: "Noto Serif SC", "Songti SC", Georgia, serif;
@@ -44,55 +44,55 @@
 }
 ```
 
-**关键原则**：
-1. **绝不用纯黑底**。黑底会让作品看起来像电影、不像「可以被采用的工作成果」
-2. **赤陶橙是唯一色相accent**，其他全部是灰阶 + 白
-3. **三字体栈**（serif英+serif中+sans+mono）营造「出版物」而非「互联网产品」的气质
+**핵심 원칙**:
+1. **절대 순수 검정 배경을 쓰지 마라**. 검정 배경은 작품이 영화처럼 보이고, '채택될 수 있는 작업 결과'처럼 보이지 않는다
+2. **테라코타 오렌지는 유일한 색상 액센트(accent)**이며, 나머지는 전부 그레이스케일 + 화이트
+3. **세 가지 폰트 스택**(serif 영어+serif 중국어+sans+mono)으로 '출판물'이 아닌 '인터넷 제품'의 분위기를 연출
 
 ---
 
-## 核心布局模式
+## 핵심 레이아웃 패턴
 
-### 1. 悬浮卡片（整个风格的基本单元）
+### 1. 플로팅 카드(전체 스타일의 기본 단위)
 
 ```css
 .gallery-card {
   background: #FFFFFF;
   border-radius: 14px;
-  padding: 6px;                          /* 内边距是「装裱纸」 */
+  padding: 6px;                          /* 내측 여백은 '장식용 마트' */
   border: 1px solid var(--hairline);
   box-shadow:
-    0 20px 60px -20px rgba(29, 29, 31, 0.12),   /* 主阴影，软且长 */
-    0 6px 18px -6px rgba(29, 29, 31, 0.06);     /* 第二层近光，制造浮感 */
-  aspect-ratio: 16 / 9;                  /* 统一 slide 比例 */
+    0 20px 60px -20px rgba(29, 29, 31, 0.12),   /* 메인 그림자, 부드럽고 길게 */
+    0 6px 18px -6px rgba(29, 29, 31, 0.06);     /* 두 번째 근거리 빛, 플로팅 느낌 생성 */
+  aspect-ratio: 16 / 9;                  /* 통일된 슬라이드 비율 */
   overflow: hidden;
 }
 .gallery-card img {
   width: 100%; height: 100%;
   object-fit: cover;
-  border-radius: 9px;                    /* 比卡片圆角略小，视觉嵌套 */
+  border-radius: 9px;                    /* 카드 라운드보다 약간 작게, 시각적 중첩 */
 }
 ```
 
-**反面教材**：不要贴边瓷砖（无padding无border无shadow）——那是信息图密度表达，不是展览。
+**반면교사**: 테두리 없는 타일(패딩 없음/테두리 없음/그림자 없음)은 붙이지 마라——그건 인포그래픽 밀도 표현이지 전시가 아니다.
 
-### 2. 3D倾斜作品墙
+### 2. 3D 기울기 작품墙
 
 ```css
 .gallery-viewport {
   position: absolute; inset: 0;
   overflow: hidden;
-  perspective: 2400px;                   /* 深一些的透视，倾斜不夸张 */
+  perspective: 2400px;                   /* 깊은 투시, 기울기가 과장되지 않음 */
   perspective-origin: 50% 45%;
 }
 .gallery-canvas {
-  width: 4320px;                         /* 画布 = 2.25× viewport */
-  height: 2520px;                        /* 留出pan空间 */
+  width: 4320px;                         /* 캔버스 = 2.25× 뷰포트 */
+  height: 2520px;                        /* pan 공간 확보 */
   transform-origin: center center;
   transform: perspective(2400px)
-             rotateX(14deg)              /* 向后倾 */
-             rotateY(-10deg)             /* 向左转 */
-             rotateZ(-2deg);             /* 轻微倾斜，去掉太规整 */
+             rotateX(14deg)              /* 뒤로 기울기 */
+             rotateY(-10deg)             /* 왼쪽으로 회전 */
+             rotateZ(-2deg);             /* 약간 기울기, 너무 정돈된 느낌 제거 */
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   gap: 40px;
@@ -100,13 +100,13 @@
 }
 ```
 
-**参数 sweet spot**：
-- rotateX: 10-15deg（再多就像开酒会 VIP 背景板）
-- rotateY: ±8-12deg（左右对称感）
-- rotateZ: ±2-3deg（「这不是机器摆的」的人味）
-- perspective: 2000-2800px（小于2000会鱼眼，大于3000接近正投影）
+**파라미터 스위트 스팟(sweet spot)**:
+- rotateX: 10-15deg(더 많으면 VIP 파티 배경판처럼 보임)
+- rotateY: ±8-12deg(좌우 대칭감)
+- rotateZ: ±2-3deg('이건 기계가 놓은 게 아니다'라는 인간미)
+- perspective: 2000-2800px(2000 미만은 어안 효과, 3000 초과는 정투시에 가까움)
 
-### 3. 2×2 四角汇聚（选择场景）
+### 3. 2×2 사각 모으기(선택 장면)
 
 ```css
 .grid22 {
@@ -117,7 +117,7 @@
 }
 ```
 
-每张卡片从对应角落（tl/tr/bl/br）向中心滑入 + fade in。对应的 `cornerEntry` 向量：
+각 카드가 해당 모서리(tl/tr/bl/br)에서 중앙으로 슬라이드 인 + 페이드 인. 해당 `cornerEntry` 벡터:
 
 ```js
 const cornerEntry = {
@@ -130,11 +130,11 @@ const cornerEntry = {
 
 ---
 
-## 五种核心动画模式
+## 다섯 가지 핵심 애니메이션 패턴
 
-### 模式 A · 四角汇聚（0.8-1.2s）
+### 패턴 A · 사각 모으기(0.8-1.2s)
 
-4 个元素从视口四角滑入，同时缩放 0.85→1.0，对应 ease-out。适合「展示多方向选择」的开场。
+4개 요소가 뷰포트 사각에서 슬라이드 인, 동시에 스케일 0.85→1.0, 대응 ease-out. '여러 방향의 선택지 보여주기' 오프닝에 적합.
 
 ```js
 const inP = easeOut(clampLerp(t, start, end));
@@ -142,23 +142,23 @@ card.style.transform = `translate3d(${(1-inP)*ce.dx}px, ${(1-inP)*ce.dy}px, 0) s
 card.style.opacity = inP;
 ```
 
-### 模式 B · 选中放大 + 其他滑出（0.8s）
+### 패턴 B · 선택 확대 + 나머지 슬라이드 아웃(0.8s)
 
-被选中的卡片放大 1.0→1.28，其他卡片 fade out + blur + 向四角漂回：
+선택된 카드가 확대 1.0→1.28, 나머지 카드는 페이드 아웃 + 블러 + 사각으로 표류 복귀:
 
 ```js
-// 被选中
+// 선택됨
 card.style.transform = `translate3d(${cellDx*outP}px, ${cellDy*outP}px, 0) scale(${1 + 0.28*easeOut(zoomP)})`;
-// 未选中
+// 미선택
 card.style.opacity = 1 - outP;
 card.style.filter = `blur(${outP * 1.5}px)`;
 ```
 
-**关键**：未选中的要 blur，不是纯 fade。blur 模拟景深，视觉上把被选中的「推出来」。
+**핵심**: 미선택 항목은 페이드만 하지 말고 블러(blur)를 줘라. 블러가 피사계 심도를 모방하여 시각적으로 선택된 항목을 '튀어나오게' 한다.
 
-### 模式 C · Ripple 涟漪展开（1.7s）
+### 패턴 C · Ripple 물결 전개(1.7s)
 
-从中心向外，按距离 delay，每张卡片依次淡入 + 从 1.25x 缩到 0.94x（「镜头拉远」）：
+중앙에서 바깥으로, 거리에 따라 delay, 각 카드가 순차적으로 페이드 인 + 1.25x에서 0.94x로 축소('줌 아웃'):
 
 ```js
 const col = i % COLS, row = Math.floor(i / COLS);
@@ -168,48 +168,48 @@ const delay = (dist / maxDist) * 0.8;
 const localT = Math.max(0, (t - rippleStart - delay) / 0.7);
 card.style.opacity = easeOut(Math.min(1, localT));
 
-// 同时整体 scale 1.25→0.94
+// 동시에 전체 스케일 1.25→0.94
 const galleryScale = 1.25 - 0.31 * easeOut(rippleProgress);
 ```
 
-### 模式 D · Sinusoidal Pan（持续漂移）
+### 패턴 D · Sinusoidal Pan(지속 표류)
 
-用正弦波 + 线性漂移组合，避免 marquee 那种「有起点有终点」的循环感：
+사인파 + 선형 표류 조합으로, 마키(marquee)처럼 '시작과 끝이 있는' 반복감을 피함:
 
 ```js
-const panX = Math.sin(panT * 0.12) * 220 - panT * 8;    // 横向左漂
-const panY = Math.cos(panT * 0.09) * 120 - panT * 5;    // 纵向上漂
-const clampedX = Math.max(-900, Math.min(900, panX));   // 防止露边
+const panX = Math.sin(panT * 0.12) * 220 - panT * 8;    // 가로 왼쪽 표류
+const panY = Math.cos(panT * 0.09) * 120 - panT * 5;    // 세로 위쪽 표류
+const clampedX = Math.max(-900, Math.min(900, panX));   // 가장자리 노출 방지
 ```
 
-**参数**：
-- 正弦周期 `0.09-0.15 rad/s`（慢，约30-50秒一个摆动）
-- 线性漂移 `5-8 px/s`（比观众眨眼慢）
-- 振幅 `120-220 px`（大到能感觉，小到不会晕）
+**파라미터**:
+- 사인파 주기 `0.09-0.15 rad/s`(느림, 약 30-50초당 한 번 흔들림)
+- 선형 표류 `5-8 px/s`(관객 눈 깜빡임보다 느림)
+- 진폭 `120-220 px`(느껴질 만큼 크지만 어지럽지 않을 만큼 작음)
 
-### 模式 E · Focus Overlay（焦点切换）
+### 패턴 E · Focus Overlay(포커스 전환)
 
-**关键设计**：focus overlay 是一个**平面元素**（不倾斜），浮在倾斜画布之上。被选中的 slide 从瓦片位置（约400×225）缩放到屏幕中央（960×540），背景画布不倾斜变化但**变暗到 45%**：
+**핵심 디자인**: focus overlay는 **평면 요소**(기울어지지 않음)로, 기울어진 캔버스 위에 떠 있다. 선택된 슬라이드가 타일 위치(약 400×225)에서 화면 중앙(960×540)으로 확대되고, 배경 캔버스는 기울기 변화 없이 **45%로 어두워짐**:
 
 ```js
-// Focus overlay (flat, centered)
+// Focus overlay (평면, 중앙)
 focusOverlay.style.width = (startW + (endW - startW) * focusIntensity) + 'px';
 focusOverlay.style.height = (startH + (endH - startH) * focusIntensity) + 'px';
 focusOverlay.style.opacity = focusIntensity;
 
-// 背景卡片变暗，但依然可见（关键！不要100%遮罩）
+// 배경 카드 어둡게, 하지만 여전히 보임(핵심! 100% 마스크 금지)
 card.style.opacity = entryOp * (1 - 0.55 * focusIntensity);   // 1 → 0.45
 card.style.filter = `brightness(${1 - 0.3 * focusIntensity})`;
 ```
 
-**清晰度铁律**：
-- Focus overlay 的 `<img>` 必须 `src` 直连原图，**不要复用 gallery 里的压缩缩略**
-- 提前 preload 所有原图到 `new Image()[]` 数组
-- overlay 自身 `width/height` 按帧计算，浏览器每帧 resample 原图
+**선명도 철칙**:
+- Focus overlay의 `<img>`는 반드시 `src`로 원본 이미지에 직접 연결하고, **갤러리의 압축 썸네일을 재사용하지 마라**
+- 모든 원본 이미지를 `new Image()[]` 배열에 미리 preload
+- overlay 자체 `width/height`는 프레임마다 계산하여 브라우저가 매 프레임 원본을 리샘플링하도록
 
 ---
 
-## 时间轴架构（可复用骨架）
+## 타임라인 아키텍처(재사용 가능한 골격)
 
 ```js
 const T = {
@@ -227,7 +227,7 @@ const T = {
   s4_walloff: [21.1, 21.8], s4_in: [21.8, 22.7], s4_hold: [23.7, 25.0],
 };
 
-// 核心 easing
+// 핵심 easing
 const easeOut = t => 1 - Math.pow(1 - t, 3);
 const easeInOut = t => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2;
 function lerp(time, start, end, fromV, toV, easing) {
@@ -238,7 +238,7 @@ function lerp(time, start, end, fromV, toV, easing) {
   return fromV + (toV - fromV) * p;
 }
 
-// 单一 render(t) 函数读时间戳、写所有元素
+// 단일 render(t) 함수가 타임스탬프를 읽고 모든 요소에 쓴다
 function render(t) { /* ... */ }
 requestAnimationFrame(function tick(now) {
   const t = ((now - startMs) / 1000) % T.DURATION;
@@ -247,18 +247,18 @@ requestAnimationFrame(function tick(now) {
 });
 ```
 
-**架构精髓**：**所有状态由时间戳 t 推导**，没有状态机、没有 setTimeout。这样：
-- 播放到任意时刻 `window.__setTime(12.3)` 立刻跳转（方便 playwright 逐帧截）
-- 循环天然无缝（t mod DURATION）
-- Debug 时能冻结任意一帧
+**아키텍처 정수**: **모든 상태는 타임스탬프 t에서 유추**, 상태 머신 없음, setTimeout 없음. 이렇게 하면:
+- 임의의 시점 `window.__setTime(12.3)`으로 즉시 점프(플레이어라이트 프레임별 캡처 편의)
+- 루프가 자연스럽게 완벽함(t mod DURATION)
+- 디버그 시 임의 프레임 동결 가능
 
 ---
 
-## 质感细节（容易被忽略但致命）
+## 질감 디테일(놓치기 쉽지만 치명적)
 
 ### 1. SVG noise texture
 
-浅色底最怕「太平」。叠加一层极弱的 fractalNoise：
+밝은 배경이 가장 두려워하는 것은 '너무 평평함'. 극도로 약한 fractalNoise를 오버레이:
 
 ```html
 <style>
@@ -273,9 +273,9 @@ requestAnimationFrame(function tick(now) {
 </style>
 ```
 
-看上去没区别，去掉就知道有了。
+보기에는 차이가 없지만, 없애보면 안다.
 
-### 2. 角落品牌标识
+### 2. 모서리 브랜드 식별
 
 ```html
 <div class="corner-brand">
@@ -295,44 +295,44 @@ requestAnimationFrame(function tick(now) {
 }
 ```
 
-只在作品墙 scene 显示，淡入淡出。像美术馆展签。
+작품墙 장면에서만 표시되며, 페이드 인/아웃. 마치 미술관 전시 라벨처럼.
 
-### 3. 品牌收束 wordmark
+### 3. 브랜드 수렴 wordmark
 
 ```css
 .brand-wordmark {
   font-family: var(--sans);
   font-size: 148px;
   font-weight: 700;
-  letter-spacing: -0.045em;   /* 负字距是关键，让字紧凑成标志 */
+  letter-spacing: -0.045em;   /* 음수 자간이 핵심, 글자를 타이트하게 로고처럼 만듦 */
 }
 .brand-wordmark .accent {
   color: var(--accent);
-  font-weight: 500;           /* accent字符反而细一点，视觉差 */
+  font-weight: 500;           /* accent 문자는 오히려 가늘게, 시각적 차이 */
 }
 ```
 
-`letter-spacing: -0.045em` 是苹果产品页大字的标准做法。
+`letter-spacing: -0.045em`은 Apple 제품 페이지 대형 글자의 표준 기법이다.
 
 ---
 
-## 常见失败模式
+## 일반적인 실패 패턴
 
-| 症状 | 原因 | 解法 |
+| 증상 | 원인 | 해결책 |
 |---|---|---|
-| 看起来像 PPT 模板 | 卡片没有 shadow / hairline | 加上两层 box-shadow + 1px border |
-| 倾斜感廉价 | 只用了 rotateY 没加 rotateZ | 加 ±2-3deg rotateZ 打破工整 |
-| Pan 感觉「卡顿」 | 用了 setTimeout 或 CSS keyframes 循环 | 用 rAF + sin/cos 连续函数 |
-| Focus 时字看不清 | 复用了 gallery 瓦片的低分图 | 独立 overlay + 原图 src 直连 |
-| 背景太空 | 纯色 `#F5F5F7` | 叠加 SVG fractalNoise 0.5 opacity |
-| 字体太"互联网" | 只有 Inter | 加 Serif（中英各一）+ mono 三栈 |
+| PPT 템플릿처럼 보임 | 카드에 shadow / hairline 없음 | 두 겹 box-shadow + 1px border 추가 |
+| 기울기감이 쌈 | rotateY만 쓰고 rotateZ 없음 | ±2-3deg rotateZ 추가하여 정돈 깨기 |
+| Pan이 '끊김'처럼 느껴짐 | setTimeout 또는 CSS keyframes 루프 사용 | rAF + sin/cos 연속 함수 사용 |
+| Focus 시 글자 안 보임 | 갤러리 타일의 저해상도 이미지 재사용 | 독립 overlay + 원본 src 직접 연결 |
+| 배경이 너무 텅 빔 | 단색 `#F5F5F7` | SVG fractalNoise 0.5 opacity 오버레이 |
+| 폰트가 너무 '인터넷' | Inter만 사용 | Serif(중영 각각) + mono 세 스택 추가 |
 
 ---
 
-## 引用
+## 참조
 
-- 完整实现样本：`/Users/alchain/Documents/写作/01-公众号写作/项目/2026.04-huashu-design发布/配图/hero-animation-v5.html`
-- 原始灵感：claude.ai/design hero 视频
-- 参考审美：Apple 产品页、Dribbble shot 集合页
+- 완전 구현 샘플: `/Users/alchain/Documents/写作/01-公众号写作/项目/2026.04-huashu-design发布/配图/hero-animation-v5.html`
+- 원본 영감: claude.ai/design hero 비디오
+- 참조 미학: Apple 제품 페이지, Dribbble shot 컬렉션 페이지
 
-遇到「多件高质量产出要陈列」的动画需求，直接从此文件 copy 骨架，换内容 + 调 timing 即可。
+'여러 개의 고품질 결과물을 전시'하는 애니메이션 요구가 있을 때, 이 파일의 골격을 직접 복사하고 콘텐츠 교체 + 타이밍 조정만 하면 된다.

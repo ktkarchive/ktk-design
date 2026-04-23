@@ -1,20 +1,20 @@
-# Animations：时间轴动画引擎
+# Animations: 타임라인 애니메이션 엔진
 
-做动画/motion design HTML时读这个。原理、用法、典型模式。
+애니메이션/motion design HTML을 작업할 때 이 문서를 읽으세요. 원리, 사용법, 전형적인 패턴을 설명합니다.
 
-## 核心模式：Stage + Sprite
+## 핵심 패턴: Stage + Sprite
 
-我们的动画系统（`assets/animations.jsx`）提供一个时间轴驱动的引擎：
+당신의 애니메이션 시스템(`assets/animations.jsx`)은 타임라인 기반 엔진을 제공합니다:
 
-- **`<Stage>`**：整个动画的容器，自动提供auto-scale（fit viewport）+ scrubber + play/pause/loop控制
-- **`<Sprite start end>`**：时间片段。一个Sprite只在`start`到`end`这段时间内显示。内部可以通过`useSprite()` hook读取自己的本地进度`t` (0→1)
-- **`useTime()`**：读当前全局时间（秒）
-- **`Easing.easeInOut` / `Easing.easeOut` / ...**：缓动函数
-- **`interpolate(t, from, to, easing?)`**：根据t插值
+- **`<Stage>`**: 전체 애니메이션의 컨테이너입니다. 자동으로 auto-scale(viewport 맞춤) + scrubber + play/pause/loop 제어를 제공합니다.
+- **`<Sprite start end>`**: 시간 구간입니다. Sprite는 `start`부터 `end`까지의 시간 동안에만 표시됩니다. 낶부에서 `useSprite()` hook을 통해 자신의 로컬 진행률(local progress) `t` (0→1)를 읽을 수 있습니다.
+- **`useTime()`**: 현재 전역 시간(초)을 읽습니다.
+- **`Easing.easeInOut` / `Easing.easeOut` / ...**: easing 함수들입니다.
+- **`interpolate(t, from, to, easing?)`**: `t`에 따라 보간(interpolate)합니다.
 
-这套模式借鉴Remotion/After Effects思路，但轻量、零依赖。
+이 패턴은 Remotion/After Effects의 아이디어를 참고했지만, 가볍고 zero dependency입니다.
 
-## 起手
+## 시작하기
 
 ```html
 <script type="text/babel" src="animations.jsx"></script>
@@ -22,7 +22,7 @@
   const { Stage, Sprite, useTime, useSprite, Easing, interpolate } = window.Animations;
 
   function Title() {
-    const { t } = useSprite();  // 本地进度 0→1
+    const { t } = useSprite();  // 로컬 진행률 0→1
     const opacity = interpolate(t, [0, 1], [0, 1], Easing.easeOut);
     const y = interpolate(t, [0, 1], [40, 0], Easing.easeOut);
     return (
@@ -39,7 +39,7 @@
 
   function Scene() {
     return (
-      <Stage duration={10}>  {/* 10秒动画 */}
+      <Stage duration={10}>  {/* 10초 애니메이션 */}
         <Sprite start={0} end={3}>
           <Title />
         </Sprite>
@@ -56,7 +56,7 @@
 </script>
 ```
 
-## 常用动画模式
+## 자주 쓰는 애니메이션 패턴
 
 ### 1. Fade In / Fade Out
 
@@ -68,7 +68,7 @@ function FadeIn({ children }) {
 }
 ```
 
-**注意范围**：`[0, 0.3]`意思是在sprite的前30%时间完成渐入，后面保持opacity=1。
+**범위에 주의**: `[0, 0.3]`은 Sprite 시간의 처음 30% 동안 Fade In을 완료하고, 이후에는 opacity=1을 유지한다는 의미입니다.
 
 ### 2. Slide In
 
@@ -94,7 +94,7 @@ function SlideIn({ children, from = 'left' }) {
 }
 ```
 
-### 3. 逐字打字机
+### 3. 글자별 타이핑 효과
 
 ```jsx
 function Typewriter({ text }) {
@@ -104,7 +104,7 @@ function Typewriter({ text }) {
 }
 ```
 
-### 4. 数字计数
+### 4. 숫자 카운트업
 
 ```jsx
 function CountUp({ from = 0, to = 100, duration = 0.6 }) {
@@ -115,28 +115,28 @@ function CountUp({ from = 0, to = 100, duration = 0.6 }) {
 }
 ```
 
-### 5. 分段解释（典型教学动画）
+### 5. 단계별 설명(전형적인 교육용 애니메이션)
 
 ```jsx
 function Scene() {
   return (
     <Stage duration={20}>
-      {/* Phase 1: 展示问题 */}
+      {/* Phase 1: 문제 제시 */}
       <Sprite start={0} end={4}>
         <Problem />
       </Sprite>
 
-      {/* Phase 2: 展示思路 */}
+      {/* Phase 2: 접근 방식 제시 */}
       <Sprite start={4} end={10}>
         <Approach />
       </Sprite>
 
-      {/* Phase 3: 展示结果 */}
+      {/* Phase 3: 결과 제시 */}
       <Sprite start={10} end={16}>
         <Result />
       </Sprite>
 
-      {/* 全程显示的字幕 */}
+      {/* 전 구간 표시되는 자막 */}
       <Sprite start={0} end={20}>
         <Caption />
       </Sprite>
@@ -145,105 +145,105 @@ function Scene() {
 }
 ```
 
-## Easing函数
+## Easing 함수
 
-预设的easing curves：
+기본 제공되는 easing curve들:
 
-| Easing | 特性 | 用在 |
+| Easing | 특성 | 용도 |
 |--------|------|------|
-| `linear` | 匀速 | 滚动字幕、持续动画 |
-| `easeIn` | 慢→快 | 退场消失 |
-| `easeOut` | 快→慢 | 入场出现 |
-| `easeInOut` | 慢→快→慢 | 位置变化 |
-| **`expoOut`** ⭐ | **指数缓出** | **Anthropic 级主 easing**（物理重量感）|
-| **`overshoot`** ⭐ | **弹性回弹** | **Toggle / 按钮弹出 / 强调交互** |
-| `spring` | 弹簧 | 交互反馈、几何体归位 |
-| `anticipation` | 先反向再正向 | 强调动作 |
+| `linear` | 등속 | 자막 스크롤, 지속적인 애니메이션 |
+| `easeIn` | 느림→빠름 | 퇴장(사라짐) |
+| `easeOut` | 빠름→느림 | 등장(나타남) |
+| `easeInOut` | 느림→빠름→느림 | 위치 이동 |
+| **`expoOut`** ⭐ | **지수형 ease-out** | **Anthropic 수준의 메인 easing**(물리적 무게감) |
+| **`overshoot`** ⭐ | **탄성 반발(overshoot)** | **Toggle / 버튼 팝업 / 상호작용 강조** |
+| `spring` | 스프링 | 상호작용 피드백, 기하 도형 복귀 |
+| `anticipation` | 먼저 반대로 갔다가 정방향 | 동작 강조 |
 
-**默认主 easing 用 `expoOut`**（不是 `easeOut`）—— 见 `animation-best-practices.md` §2。
-入场用 `expoOut`、出场用 `easeIn`、toggle 用 `overshoot`——Anthropic 级动画的基础规律。
+**기본 메인 easing은 `expoOut`을 사용하세요**(`easeOut`이 아닙니다)——`animation-best-practices.md` §2 참고.
+등장에는 `expoOut`, 퇴장에는 `easeIn`, toggle에는 `overshoot`——Anthropic 수준 애니메이션의 기본 규칙입니다.
 
-## 节奏和时长指南
+## 리듬과 길이 가이드
 
-### 微交互（0.1-0.3秒）
-- 按钮hover
-- 卡片expand
-- Tooltip出现
+### 마이크로 인터랙션(0.1-0.3초)
+- 버튼 hover
+- 카드 expand
+- Tooltip 표시
 
-### UI过渡（0.3-0.8秒）
-- 页面切换
-- 模态框出现
-- 列表item加入
+### UI 전환(0.3-0.8초)
+- 페이지 전환
+- 모달 창 표시
+- 리스트 아이템 추가
 
-### 叙事动画（2-10秒每段）
-- 概念解释的一个phase
-- 数据图表的reveal
-- 场景转换
+### 날티브 애니메이션(2-10초 per segment)
+- 개념 설명의 한 phase
+- 데이터 차트의 reveal
+- 장면 전환
 
-### 单段叙事动画最长不超过10秒
-人类注意力有限。10秒讲一件事，讲完换下一件。
+### 단일 날티브 애니메이션은 최대 10초를 넘지 마세요
+사람의 집중력은 한정되어 있습니다. 10초 동안 한 가지를 이야기하고, 끝나면 다음 것으로 넘어가세요.
 
-## 设计动画的思考顺序
+## 애니메이션 설계 시 생각 순서
 
-### 1. 先有内容/故事，再有动画
+### 1. 먼저 콘텐츠/스토리가 있고, 그다음 애니메이션이 있어야 합니다
 
-**错误**：先想要做fancy动画，再塞内容进去
-**正确**：先想清楚要传达什么信息，再用动画手段serve这个信息
+**잘못된 예**: 먼저 화려한 애니메이션을 만들고 싶어 한 뒤, 그 안에 콘텐츠를 집어넣는 것
+**올바른 예**: 먼저 전달할 메시지를 명확히 한 뒤, 애니메이션으로 그 메시지를 전달하는 것
 
-动画是**signal**，不是**装饰**。一个fade-in强调的是"这里很重要，请看"——如果什么都fade-in，signal就失效。
+애니메이션은 **signal**이지 **장식**이 아닙니다. Fade-in은 "여기가 중요하니 봐 주세요"라는 강조입니다——만약 모든 것에 fade-in을 적용하면 signal은 물러갑니다.
 
-### 2. 分Scene写时间轴
+### 2. Scene별로 타임라인을 작성하세요
 
 ```
-0:00 - 0:03   问题出现（fade in）
-0:03 - 0:06   问题放大/展开（zoom+pan）
-0:06 - 0:09   解法出现（slide in from right）
-0:09 - 0:12   解法展开说明（typewriter）
-0:12 - 0:15   结果演示（counter up + chart reveal）
-0:15 - 0:18   总结一句话（static，读3秒）
-0:18 - 0:20   CTA或fade out
+0:00 - 0:03   문제 등장(fade in)
+0:03 - 0:06   문제 확대/전개(zoom+pan)
+0:06 - 0:09   해결책 등장(slide in from right)
+0:09 - 0:12   해결책 설명 전개(typewriter)
+0:12 - 0:15   결과 시연(counter up + chart reveal)
+0:15 - 0:18   한 줄 요약(static, 3초 동안 읽기)
+0:18 - 0:20   CTA 또는 fade out
 ```
 
-写完时间轴再写组件。
+타임라인을 작성한 뒤 컴포넌트를 작성하세요.
 
-### 3. 资源先行
+### 3. 리소스를 먼저 준비하세요
 
-动画要用的图片/图标/字体**先**准备好。不要画到一半去找素材——打断节奏。
+애니메이션에 사용할 이미지/아이콘/폰트는 **미리** 준비하세요. 작업 도중 소재를 찾으러 가지 마세요——작업 흐름이 끊깁니다.
 
-## 常见问题
+## 자주 묻는 질문
 
-**动画卡顿**
-→ 主要是layout thrashing。用`transform`和`opacity`，不要动`top`/`left`/`width`/`height`/`margin`。浏览器GPU加速`transform`。
+**애니메이션이 끊깁니다**
+→ 주로 layout thrashing 때문입니다. `transform`과 `opacity`를 사용하고, `top`/`left`/`width`/`height`/`margin`은 건드리지 마세요. 브라우저는 `transform`을 GPU로 가속합니다.
 
-**动画太快，看不清楚**
-→ 人读一个汉字需要100-150ms，一个词300-500ms。如果你用文字讲故事，单句至少留3秒。
+**애니메이션이 너무 빨라서 잘 보이지 않습니다**
+→ 사람이 한자 하나를 읽는 데 100-150ms, 단어 하나에는 300-500ms가 필요합니다. 글로 이야기를 전달한다면 한 문장에는 최소 3초를 할애하세요.
 
-**动画太慢，观众无聊**
-→ 有趣的视觉变化要密集。静态画面超过5秒就会闷。
+**애니메이션이 너무 느려서 지루합니다**
+→ 흥미로운 시각적 변화는 빽빽이 배치해야 합니다. 정적인 화면은 5초를 넘으면 지루해집니다.
 
-**多个动画互相影响**
-→ 用CSS的`will-change: transform`提前告诉浏览器这个元素会动，减少reflow。
+**여러 애니메이션이 서로 영향을 줍니다**
+→ CSS의 `will-change: transform`을 사용해 브라우저에게 이 요소가 움직일 것을 미리 알려주면 reflow를 줄일 수 있습니다.
 
-**录制成视频**
-→ 用 skill 自带工具链（一条命令出三种格式）：见 `video-export.md`
-- `scripts/render-video.js` — HTML → 25fps MP4（Playwright + ffmpeg）
-- `scripts/convert-formats.sh` — 25fps MP4 → 60fps MP4 + 优化 GIF
-- 想要更精确的帧渲染？让 render(t) 成为 pure function，见 `animation-pitfalls.md` 第 5 条
+**비디오로 녹화하려면**
+→ skill에 내장된 도구체인을 사용하세요(한 번의 명령으로 세 가지 형식 출력): `video-export.md` 참고
+- `scripts/render-video.js` — HTML → 25fps MP4(Playwright + ffmpeg)
+- `scripts/convert-formats.sh` — 25fps MP4 → 60fps MP4 + 최적화 GIF
+- 더 정확한 프레임 렌더링을 원하시나요? render(t)를 pure function으로 만드세요. `animation-pitfalls.md` 제 5항 참고
 
-## 和视频工具的配合
+## 비디오 도구와의 연동
 
-这个skill做的是**HTML动画**（在浏览器里跑的）。如果最终产出要作为视频素材：
+이 skill은 **HTML 애니메이션**(브라우저에서 실행되는)을 만듭니다. 최종 산출물이 비디오 소재로 사용되어야 한다면:
 
-- **短动画/concept demo**：用这里的方法做HTML动画 → 屏幕录制
-- **长视频/叙事**：本 skill 专注 HTML 动画，长视频用 AI 视频生成类 skill 或专业视频软件
-- **motion graphics**：专业的After Effects/Motion Canvas更合适
+- **짧은 애니메이션/concept demo**: 여기의 방법으로 HTML 애니메이션을 만든 뒤 화면 녹화
+- **장편 비디오/날티브**: 이 skill은 HTML 애니메이션에 집중합니다. 장편 비디오는 AI 비디오 생성 skill이나 전문 비디오 소프트웨어를 사용하세요
+- **motion graphics**: 전문적인 After Effects/Motion Canvas가 더 적합합니다
 
-## 关于Popmotion等库
+## Popmotion 등 라이브러리에 대해
 
-如果你真的需要物理动画（spring、decay、keyframes with precise timing），我们的engine搞不定，可以fallback到Popmotion：
+물리 기반 애니메이션(spring, decay, 정밀한 타이밍의 keyframes)이 정말 필요하다면, 당신의 엔진으로는 처리할 수 없으므로 Popmotion으로 fallback할 수 있습니다:
 
 ```html
 <script src="https://unpkg.com/popmotion@11.0.5/dist/popmotion.min.js"></script>
 ```
 
-但**先试试我们的engine**。90%的情况够用。
+하지만 **우리 엔진을 먼저 시도해 보세요**. 90%의 경우에 충분합니다.
