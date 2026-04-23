@@ -1,4 +1,4 @@
-<sub>🌐 <a href="README.en.md">English</a> · <b>中文</b></sub>
+<sub>🌐 <a href="README.en.md">English</a> · <b>中文</b> · <a href="README.ko.md">한국어</a></sub>
 
 <div align="center">
 
