@@ -1,10 +1,10 @@
-<sub>🌐 <a href="README.en.md">English</a> · <b>中文</b> · <a href="README.ko.md">한국어</a></sub>
+<sub>🌐 <a href="README.en.md">English</a> · <a href="README.zh.md">中文</a> · <b>한국어</b></sub>
 
 <div align="center">
 
-# Huashu Design
+# KTK Design
 
-> *「打字。回车。一份能交付的设计。」*
+> *「타이핑하고 엔터를 누른다. 전달 수준의 디자인이 손에 들어온다.」*
 > *"Type. Hit enter. A finished design lands in your lap."*
 
 [![License](https://img.shields.io/badge/License-Personal%20Use%20Only-orange.svg)](LICENSE)
@@ -13,238 +13,238 @@
 
 <br>
 
-**在你的 agent 里打一句话，拿回一份能交付的设计。**
+**에이전트에게 한 마디 던지면, 바로 쓸 수 있는 디자인을 얻는다.**
 
 <br>
 
-3 到 30 分钟，你能 ship 一段**产品发布动画**、一个能点击的 App 原型、一套能编辑的 PPT、一份印刷级的信息图。
+3분에서 30분이면 **제품 런칭 애니메이션**, 클릭 가능한 App 프로토타입, 편집 가능한 PPT, 인쇄급 인포그래픽을 만들 수 있다.
 
-不是「AI 做的还行」那种水平——是看起来像大厂设计团队做的。给 skill 你的品牌资产（logo、色板、UI 截图），它会读懂你的品牌气质；什么都不给，内置的 20 种设计语汇也能兜底到不出 AI slop。
+「AI가 그럭저럭 만들었네」 수준이 아니라 — 대기업 디자인 팀이 만든 것처럼 보이는 수준이다. 브랜드 자산(로고, 색상 팔레트, UI 스크린샷)을 주면 브랜드의 아이덴티티를 읽어낸다. 아무것도 주지 않아도 내장된 20가지 디자인 어휘가 AI slop 없이 커버한다.
 
-**你看到这篇 README 里的每一个动画，都是 huashu-design 自己做的。** 不是 Figma，不是 AE，就是一句话 prompt + skill 跑通。下次产品发布要做宣传片？现在你也能做。
+**이 README에 보이는 모든 애니메이션은 KTK Design 스스로 만든 것이다.** 피그마도, 애프터이펙트도 아니다. 단 한 문장의 프롬프트와 스킬로 완성했다. 다음 제품 런칭에 홍보 영상이 필요하다고? 이제 당신도 할 수 있다.
 
+```bash
+npx skills add ktkarchive/ktk-design
 ```
-npx skills add alchaincyf/huashu-design
-```
 
-跨 agent 通用——Claude Code、Cursor、Codex、OpenClaw、Hermes 都能装。
+Claude Code, Cursor, Codex, OpenClaw, Hermes — 모든 에이전트에서 설치 가능.
 
-[看效果](#demo-画廊) · [安装](#装上就能用) · [能做什么](#能做什么) · [核心机制](#核心机制) · [和 Claude Design 的关系](#和-claude-design-的关系)
+[효과 보기](#데모-갤러리) · [설치](#설치) · [할-수-있는-것](#할-수-있는-것) · [핵심-메커니즘](#핵심-메커니즘) · [Claude-Design과의-관계](#claude-design과의-관계)
 
 </div>
 
 ---
 
 <p align="center">
-  <img src="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/hero-animation-v10-en.gif" alt="huashu-design Hero · 打字 → 选方向 → 画廊展开 → 聚焦 → 品牌显形" width="100%">
+  <img src="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/hero-animation-v10-en.gif" alt="KTK Design Hero · 타이핑 → 방향 선택 → 갤러리 펼침 → 포커스 → 브랜드 드러남" width="100%">
 </p>
 
 <p align="center"><sub>
-  ▲ 25 秒 · Terminal → 4 方向 → Gallery ripple → 4 次 Focus → Brand reveal<br>
-  👉 <a href="https://www.huasheng.ai/huashu-design-hero/">访问带音效的 HTML 互动版</a> ·
-  <a href="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/hero-animation-v10-en.mp4">下载 MP4（含 BGM+SFX · 10MB）</a>
+  ▲ 25초 · Terminal → 4 방향 → Gallery ripple → 4회 Focus → Brand reveal<br>
+  👉 <a href="https://www.huasheng.ai/huashu-design-hero/">소리가 포함된 HTML 인터랙티브 버전 보기</a> ·
+  <a href="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/hero-animation-v10-en.mp4">MP4 다운로드 (BGM+SFX 포함 · 10MB)</a>
 </sub></p>
 
 ---
 
-## 装上就能用
+## 설치
 
 ```bash
-npx skills add alchaincyf/huashu-design
+npx skills add ktkarchive/ktk-design
 ```
 
-然后在 Claude Code 里直接说话：
+그리고 Claude Code에서 바로 말하면 된다:
 
 ```
-「做一份 AI 心理学的演讲 PPT，推荐 3 个风格方向让我选」
-「做个 AI 番茄钟 iOS 原型，4 个核心屏幕要真能点击」
-「把这段逻辑做成 60 秒动画，导出 MP4 和 GIF」
-「帮我对这个设计做一个 5 维度评审」
+「AI 심리학 프레젠테이션 PPT를 만들어줘, 3가지 스타일 방향을 추천해줘」
+「AI 포모도로 타이머 iOS 프로토타입을 만들어줘, 4개 핵심 화면이 실제로 클릭할 수 있어야 해」
+「이 로직을 60초 애니메이션으로 만들어줘, MP4와 GIF로 낼 수 있어?」
+「이 디자인에 대해 5차원 평가를 해줘」
 ```
 
-没有按钮、没有面板、没有 Figma 插件。
+버튼도, 패널도, 피그마 플러그인도 없다.
 
 ---
 
-## Star 趋势
+## Star 추이
 
 <p align="center">
-  <a href="https://star-history.com/#alchaincyf/huashu-design&Date">
-    <img src="https://api.star-history.com/svg?repos=alchaincyf/huashu-design&type=Date" alt="huashu-design Star History" width="80%">
+  <a href="https://star-history.com/#ktkarchive/ktk-design&Date">
+    <img src="https://api.star-history.com/svg?repos=ktkarchive/ktk-design&type=Date" alt="KTK Design Star History" width="80%">
   </a>
 </p>
 
 ---
 
-## 能做什么
+## 할 수 있는 것
 
-| 能力 | 交付物 | 典型耗时 |
-|------|--------|----------|
-| 交互原型（App / Web） | 单文件 HTML · 真 iPhone bezel · 可点击 · Playwright 验证 | 10–15 min |
-| 演讲幻灯片 | HTML deck（浏览器演讲）+ 可编辑 PPTX（文本框保留） | 15–25 min |
-| 时间轴动画 | MP4（25fps / 60fps 插帧）+ GIF（palette 优化）+ BGM | 8–12 min |
-| 设计变体 | 3+ 并排对比 · Tweaks 实时调参 · 跨维度探索 | 10 min |
-| 信息图 / 可视化 | 印刷级排版 · 可导 PDF/PNG/SVG | 10 min |
-| 设计方向顾问 | 5 流派 × 20 种设计哲学 · 推荐 3 方向 · 并行生成 Demo | 5 min |
-| 5 维度专家评审 | 雷达图 + Keep/Fix/Quick Wins · 可操作修复清单 | 3 min |
+| 능력 | 결과물 | 일반 소요 시간 |
+|------|--------|---------------|
+| 상호작용 프로토타입 (App / Web) | 단일 파일 HTML · 실제 iPhone 베젤 · 클릭 가능 · Playwright 검증 | 10–15분 |
+| 프레젠테이션 슬라이드 | HTML 덱 (브라우저 프레젠테이션) + 편집 가능한 PPTX (텍스트 상자 보존) | 15–25분 |
+| 타임라인 애니메이션 | MP4 (25fps / 60fps 보간) + GIF (팔레트 최적화) + BGM | 8–12분 |
+| 디자인 변형 | 3개 이상 나란히 비교 · Tweaks 실시간 조정 · 다차원 탐색 | 10분 |
+| 인포그래픽 / 시각화 | 인쇄급 타이포그래피 · PDF/PNG/SVG 내보내기 | 10분 |
+| 디자인 방향 고문 | 5 학파 × 20가지 디자인 철학 · 3 방향 추천 · 병렬로 Demo 생성 | 5분 |
+| 5차원 전문가 평가 | 레이더 차트 + Keep/Fix/Quick Wins · 바로 실행할 수 있는 수정 목록 | 3분 |
 
 ---
 
-## Demo 画廊
+## 데모 갤러리
 
-### 设计方向顾问
+### 디자인 방향 고문
 
-模糊需求时的 fallback：从 5 流派 × 20 种设计哲学里挑 3 个差异化方向，并行生成 3 个 Demo 让你选。
+요구사항이 모호할 때의 fallback: 5 학파 × 20가지 디자인 철학에서 3개의 차별화된 방향을 골라, 병렬로 3개의 Demo를 만들어 선택하게 한다.
 
 <p align="center"><img src="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/w3-fallback-advisor.gif" width="100%"></p>
 
-### iOS App 原型
+### iOS App 프로토타입
 
-iPhone 15 Pro 精确机身（灵动岛 / 状态栏 / Home Indicator）· 状态驱动多屏切换 · 真图从 Wikimedia/Met/Unsplash 取 · Playwright 自动点击测试。
+iPhone 15 Pro 정확한 외관 (다이내믹 아일랜드 / 상태 표시줄 / 홈 인디케이터) · 상태 기반 다중 화면 전환 · 진짜 이미지는 Wikimedia/Met/Unsplash에서 가져옴 · Playwright 자동 클릭 테스트.
 
 <p align="center"><img src="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/c1-ios-prototype.gif" width="100%"></p>
 
-### Motion Design 引擎
+### 모션 디자인 엔진
 
-Stage + Sprite 时间片段模型 · `useTime` / `useSprite` / `interpolate` / `Easing` 四 API 覆盖所有动画需求 · 一条命令导出 MP4 / GIF / 60fps 插帧 / 带 BGM 的成片。
+Stage + Sprite 타임라인 세그먼트 모델 · `useTime` / `useSprite` / `interpolate` / `Easing` 4개 API로 모든 애니메이션 요구사항 커버 · 한 줄 명령으로 MP4 / GIF / 60fps 보간 / BGM이 포함된 완성물 내보내기.
 
 <p align="center"><img src="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/c3-motion-design.gif" width="100%"></p>
 
-### HTML Slides → 可编辑 PPTX
+### HTML Slides → 편집 가능한 PPTX
 
-HTML deck 浏览器演讲 · `html2pptx.js` 读 DOM 的 computedStyle 逐元素翻译成 PowerPoint 对象 · 导出的是**真文本框**，不是图片铺底。
+HTML 덱 브라우저 프레젠테이션 · `html2pptx.js`가 DOM의 computedStyle을 읽고 요소별로 PowerPoint 객체로 번역 · 내보내는 것은 **진짜 텍스트 상자**이지, 이미지를 깔아놓은 것이 아니다.
 
 <p align="center"><img src="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/c2-slides-pptx.gif" width="100%"></p>
 
-### Tweaks · 实时变体切换
+### Tweaks · 실시간 변형 전환
 
-配色 / 字型 / 信息密度等参数化 · 侧边面板切换 · 纯前端 + `localStorage` 持久化 · 刷新不丢。
+색상 / 서체 / 정보밀도 등 파라미터화 · 사이드 패널 전환 · 순수 프론트엔드 + `localStorage` 영속화 · 새로고침해도 날아가지 않음.
 
 <p align="center"><img src="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/c4-tweaks.gif" width="100%"></p>
 
-### 信息图 / 数据可视化
+### 인포그래픽 / 데이터 시각화
 
-杂志级排版 · CSS Grid 精准分栏 · `text-wrap: pretty` 排印细节 · 真数据驱动 · 可导 PDF 矢量 / PNG 300dpi / SVG。
+잡지급 타이포그래피 · CSS Grid 정밀 분할 · `text-wrap: pretty` 조판 디테일 · 실제 데이터 기반 · PDF 벡터 / PNG 300dpi / SVG 내보내기.
 
 <p align="center"><img src="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/c5-infographic.gif" width="100%"></p>
 
-### 5 维度专家评审
+### 5차원 전문가 평가
 
-哲学一致性 · 视觉层级 · 细节执行 · 功能性 · 创新性 各 0–10 分 · 雷达图可视化 · 输出 Keep / Fix / Quick Wins 清单。
+철학적 일관성 · 시각적 계층 · 디테일 실행 · 기능성 · 혁신성 각 0–10점 · 레이더 차트 시각화 · Keep / Fix / Quick Wins 목록 출력.
 
 <p align="center"><img src="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/c6-expert-review.gif" width="100%"></p>
 
-### Junior Designer 工作流
+### Junior Designer 워크플로우
 
-不闷头做大招：先写 assumptions + placeholders + reasoning，尽早 show 给你，再迭代。理解错了早改比晚改便宜 100 倍。
+혼자서 큰 그림을 그리지 않는다: 먼저 assumptions + placeholders + reasoning을 쓰고, 가능한 한 일찍 사용자에게 보여준 뒤 반복한다. 이해가 틀렸을 때 일찍 고치는 게 늦게 고치는 것보다 100배 싸다.
 
 <p align="center"><img src="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/w2-junior-designer.gif" width="100%"></p>
 
-### 品牌资产协议 5 步硬流程
+### 브랜드 자산 프로토콜 5단계 강제 프로세스
 
-涉及具体品牌时强制执行：问 → 搜 → 下载（三条兜底）→ grep 色值 → 写 `brand-spec.md`。
+구체적인 브랜드 관련 시 강제 실행: 묻기 → 검색 → 다운로드 (3단계 대비) → grep 색상 추출 → `brand-spec.md` 작성.
 
 <p align="center"><img src="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/w1-brand-protocol.gif" width="100%"></p>
 
 ---
 
-## 核心机制
+## 핵심 메커니즘
 
-### 品牌资产协议
+### 브랜드 자산 프로토콜
 
-skill 里最硬的一段规则。涉及具体品牌（Stripe、Linear、Anthropic、自家公司等）时强制执行 5 步：
+스킬에서 가장 엄격한 규칙. 구체적인 브랜드 (Stripe, Linear, Anthropic, 자사 등) 관련 시 5단계 강제 실행:
 
-| 步骤 | 动作 | 目的 |
+| 단계 | 동작 | 목적 |
 |------|------|------|
-| 1 · 问 | 用户有 brand guidelines 吗？ | 尊重已有资源 |
-| 2 · 搜官方品牌页 | `<brand>.com/brand` · `brand.<brand>.com` · `<brand>.com/press` | 抓权威色值 |
-| 3 · 下载资产 | SVG 文件 → 官网 HTML 全文 → 产品截图取色 | 三条兜底，前一条失败立刻走下一条 |
-| 4 · grep 提取色值 | 从资产里抓所有 `#xxxxxx`，按频率排序，过滤黑白灰 | **绝不从记忆猜品牌色** |
-| 5 · 固化 spec | 写 `brand-spec.md` + CSS 变量，所有 HTML 引用 `var(--brand-*)` | 不固化就会忘 |
+| 1 · 묻기 | 브랜드 가이드라인이 있으신가요? | 기존 자산 존중 |
+| 2 · 공식 브랜드 페이지 검색 | `<brand>.com/brand` · `brand.<brand>.com` · `<brand>.com/press` | 권위 있는 색상 확보 |
+| 3 · 자산 다운로드 | SVG 파일 → 공식 홈페이지 HTML 전문 → 제품 스크린샷 색상 추출 | 3단계 대비, 앞 단계가 실패하면 바로 다음 단계로 |
+| 4 · grep 색상 추출 | 자산에서 모든 `#xxxxxx`를 잡아 빈도순으로 정렬, 흑백 회색 필터 | **절대 기억으로 브랜드 색상을 추측하지 않음** |
+| 5 · spec 고정 | `brand-spec.md` 작성 + CSS 변수, 모든 HTML은 `var(--brand-*)`를 참조 | 고정하지 않으면 잊어버림 |
 
-A/B 测试（v1 vs v2，各跑 6 agent）：**v2 的稳定性方差比 v1 低 5 倍**。稳定性的稳定性，这是 skill 真正的护城河。
+A/B 테스트 (v1 vs v2, 각 6개 에이전트 실행): **v2의 안정성 분산이 v1보다 5배 낮다**. 안정성의 안정성, 이것이 스킬의 진정한 해자다.
 
-### 设计方向顾问（Fallback）
+### 디자인 방향 고문 (Fallback)
 
-当用户需求模糊到无法着手时触发：
+사용자 요구사항이 모호해서 손을 댈 수 없을 때 트리거:
 
-- 不凭通用直觉硬做，进入 Fallback 模式
-- 从 5 流派 × 20 种设计哲学里推荐 3 个**必须来自不同流派**的差异化方向
-- 每个方向配代表作、气质关键词、代表设计师
-- 并行生成 3 个视觉 Demo 让用户选
-- 选定后进入主干 Junior Designer 流程
+- 범용 직관으로 억지로 만들지 않고, Fallback 모드 진입
+- 5 학파 × 20가지 디자인 철학에서 **반드시 다른 학파에서 나온** 3개의 차별화된 방향을 추천
+- 각 방향에 대표작, 기질 키워드, 대표 디자이너를 배치
+- 병렬로 3개의 시각적 Demo를 생성하여 사용자가 선택하게 함
+- 선택 후 주 Junior Designer 프로세스로 진입
 
-### Junior Designer 工作流
+### Junior Designer 워크플로우
 
-默认工作模式，贯穿所有任务：
+모든 작업에 적용되는 기본 작업 모드:
 
-- 开工前 show 问题清单一次性发给用户，等批量答完再动手
-- HTML 里先写 assumptions + placeholders + reasoning comments
-- 尽早 show 给用户（哪怕只是灰色方块）
-- 填充实际内容 → variations → Tweaks 这三步分别再 show 一次
-- 交付前用 Playwright 肉眼过一遍浏览器
+- 작업 시작 전에 질문 목록을 한 번에 보여주고, 사용자가 일괄 답변할 때까지 기다림
+- HTML에 먼저 assumptions + placeholders + reasoning comments를 작성
+- 가능한 한 일찍 사용자에게 보여줌 (회색 사각형이라도)
+- 실제 내용 채우기 → variations → Tweaks 이 3단계를 각각 다시 한 번 보여줌
+- 전달 전에 Playwright로 브라우저를 눈으로 한 번 훑어봄
 
-### 反 AI slop 规则
+### 반 AI slop 규칙
 
-避免一眼 AI 的视觉最大公约数（紫渐变 / emoji 图标 / 圆角+左 border accent / SVG 画人脸 / Inter 做 display）。用 `text-wrap: pretty` + CSS Grid + 精心选择的 serif display 和 oklch 色彩。
+한눈에 AI가 만든 것처럼 보이는 시각적 최대공약수 (보라 그라데이션 / 이모지 아이콘 / 둥근 모서리+왼쪽 테두리 강조 / SVG로 얼굴 그리기 / Inter를 display용으로 쓰기)를 피한다. `text-wrap: pretty` + CSS Grid + 정성껏 선택한 serif display와 oklch 색상을 사용한다.
 
 ---
 
-## 和 Claude Design 的关系
+## Claude Design과의 관계
 
-我大方承认：品牌资产协议的哲学是从 Claude Design 流传出来的提示词里偷师的。那份提示词反复强调**好的高保真设计不是从白纸开始，而是从已有的设计上下文长出来**。这个原则是 65 分作品和 90 分作品的分水岭。
+솔직히 인정한다: 브랜드 자산 프로토콜의 철학은 Claude Design에서 유출된 프롬프트에서 배운 것이다. 그 프롬프트는 반복해서 강조했다 — **좋은 고품질 디자인은 백지에서 시작하는 것이 아니라, 이미 존재하는 디자인 맥락에서 자라나는 것이다**. 이 원칙이 65점 작품과 90점 작품의 분수령이다.
 
-定位差异：
+포지셔닝 차이:
 
-| | Claude Design | huashu-design |
+| | Claude Design | KTK Design |
 |---|---|---|
-| 形态 | 网页产品（浏览器里用） | skill（Claude Code 里用） |
-| 配额 | 订阅 quota | API 消耗 · 并行跑 agent 不受 quota 限 |
-| 交付物 | 画布内 + 可导 Figma | HTML / MP4 / GIF / 可编辑 PPTX / PDF |
-| 操作方式 | GUI（点、拖、改） | 对话（说话、等 agent 做完） |
-| 复杂动画 | 有限 | Stage + Sprite 时间轴 · 60fps 导出 |
-| 跨 agent | 专属 Claude.ai | 任意 skill 兼容 agent |
+| 형태 | 웹 제품 (브라우저에서 사용) | 스킬 (Claude Code에서 사용) |
+| 할당량 | 구독 quota | API 소비 · 병렬로 에이전트 실행 시 quota 제한 없음 |
+| 결과물 | 캔버스 내 + Figma로 내보내기 가능 | HTML / MP4 / GIF / 편집 가능한 PPTX / PDF |
+| 조작 방식 | GUI (클릭, 드래그, 수정) | 대화 (말하고, 에이전트가 끝날 때까지 기다림) |
+| 복잡한 애니메이션 | 제한적 | Stage + Sprite 타임라인 · 60fps 내보내기 |
+| 에이전트 간 호환 | Claude.ai 전용 | 모든 스킬 호환 에이전트 |
 
-Claude Design 是**更好的图形工具**，huashu-design 是**让图形工具这层消失**。两条路，不同受众。
+Claude Design은 **더 나은 그래픽 도구**이고, KTK Design은 **그래픽 도구라는 레이어를 없애는 것**이다. 두 갈래 길, 다른 대상.
 
 ---
 
 ## Limitations
 
-- **不支持图层级可编辑的 PPTX 到 Figma**。产出 HTML，可截图、录屏、导图，但不能拖进 Keynote 改文字位置。
-- **Framer Motion 级别的复杂动画不行**。3D、物理模拟、粒子系统超出 skill 边界。
-- **完全空白的品牌从零设计质量会掉到 60–65 分**。凭空画 hi-fi 本来就是 last resort。
+- **레이어 단위 편집 가능한 PPTX를 Figma로 내보내기는 지원하지 않는다**. 결과물은 HTML이며, 스크린샷, 녹화, 그래프 낼 수 있지만, Keynote로 끌어다가 텍스트 위치를 수정할 수는 없다.
+- **Framer Motion 수준의 복잡한 애니메이션은 안 된다**. 3D, 물리 시뮬레이션, 입자 시스템은 스킬의 범위를 벗어난다.
+- **완전히 빈 브랜드를 처음부터 디자인하면 품질이 60–65점으로 떨어진다**. 공중에 hi-fi를 그리는 것은 원래 최후의 수단이다.
 
-这是一个 80 分的 skill，不是 100 分的产品。对不愿意打开图形界面的人，80 分的 skill 比 100 分的产品好用。
+이것은 80점짜리 스킬이지, 100점짜리 제품이 아니다. 그래픽 인터페이스를 열고 싶지 않은 사람에게, 80점짜리 스킬이 100점짜리 제품보다 낫다.
 
 ---
 
-## 仓库结构
+## 저장소 구조
 
 ```
-huashu-design/
-├── SKILL.md                 # 主文档（给 agent 读）
-├── README.md                # 本文件（给用户读）
-├── assets/                  # Starter Components
+ktk-design/
+├── SKILL.md                 # 메인 문서 (에이전트가 읽음)
+├── README.md                # 이 파일 (사용자가 읽음)
+├── assets/                  # 스타터 컴포넌트
 │   ├── animations.jsx       # Stage + Sprite + Easing + interpolate
-│   ├── ios_frame.jsx        # iPhone 15 Pro bezel
+│   ├── ios_frame.jsx        # iPhone 15 Pro 베젤
 │   ├── android_frame.jsx
 │   ├── macos_window.jsx
 │   ├── browser_window.jsx
-│   ├── deck_stage.js        # HTML 幻灯片引擎
-│   ├── deck_index.html      # 多文件 deck 拼接器
-│   ├── design_canvas.jsx    # 并排变体展示
-│   ├── showcases/           # 24 个预制样例（8 场景 × 3 风格）
-│   └── bgm-*.mp3            # 6 首场景化背景音乐
-├── references/              # 按任务深入读的子文档
+│   ├── deck_stage.js        # HTML 슬라이드 엔진
+│   ├── deck_index.html      # 다중 파일 덱 조합기
+│   ├── design_canvas.jsx    # 나란히 변형 보여주기
+│   ├── showcases/           # 24개 프리셋 샘플 (8 장면 × 3 스타일)
+│   └── bgm-*.mp3            # 6개 장면화 배경음악
+├── references/              # 작업별 심화 읽기 서브 문서
 │   ├── animation-pitfalls.md
-│   ├── design-styles.md     # 20 种设计哲学详细库
+│   ├── design-styles.md     # 20가지 디자인 철학 상세 라이브러리
 │   ├── slide-decks.md
 │   ├── editable-pptx.md
 │   ├── critique-guide.md
 │   ├── video-export.md
 │   └── ...
-├── scripts/                 # 导出工具链
+├── scripts/                 # 내보내기 툴체인
 │   ├── render-video.js      # HTML → MP4
 │   ├── convert-formats.sh   # MP4 → 60fps + GIF
 │   ├── add-music.sh         # MP4 + BGM
@@ -252,47 +252,58 @@ huashu-design/
 │   ├── export_deck_pptx.mjs
 │   ├── html2pptx.js
 │   └── verify.py
-└── demos/                   # 9 个能力演示 (c*/w*)，中英双版 GIF/MP4/HTML + hero v10
+└── demos/                   # 9개 능력 데모 (c*/w*), 한중영 GIF/MP4/HTML + hero v10
 ```
 
 ---
 
-## 起源
+## 기원
 
-Anthropic 发布 Claude Design 那天我玩到凌晨四点。几天之后发现自己再也没点开过它，不是它不好——它是这个赛道目前最成熟的产品——是我宁愿让 agent 在终端里帮我干活，也不愿意打开任何图形界面。
+Anthropic이 Claude Design을 발표한 날, 나는 새벽 4시까지 놀았다. 며칠 후, 나는 그것을 다시 열지 않았다 — 그것이 나쁘다는 게 아니다 — 이 분야에서 가장 성숙한 제품이다 — 나는 에이전트가 터미널에서 일을 도와주는 걸 원했지, 어떤 그래픽 인터페이스도 열고 싶지 않았다.
 
-于是让 agent 拆解 Claude Design 本身（包括社区流传的系统提示词、品牌资产协议、组件机制），蒸馏成结构化 spec，再写成 skill 装进自己的 Claude Code。
+그래서 에이전트에게 Claude Design 자체를 분해하도록 했다 (커뮤니티에서 유출된 시스템 프롬프트, 브랜드 자산 프로토콜, 컴포넌트 메커니즘 포함), 구조화된 spec으로 증류하고, 다시 스킬로 써서 내 Claude Code에 집어넣었다.
 
-感谢 Anthropic 把 Claude Design 的提示词写得清晰。这种基于其他产品灵感的二次创作，是开源文化在 AI 时代的新形态。
-
----
-
-## License · 使用授权
-
-**个人使用免费、自由**——学习、研究、创作、给自己做东西、写文章、做副业、发微博发公众号，随便用，不用打招呼。
-
-**企业商用禁止**——任何公司、团队、或以盈利为目的的组织，想把本 skill 集成到产品、对外服务、给客户交付工作中使用，**必须先和花生联系获得授权**。包括但不限于：
-- 把 skill 作为公司内部工具链的一部分
-- 把 skill 产出物作为对外交付物的主要创作手段
-- 基于 skill 二次开发做成商业产品
-- 在客户商单项目中使用
-
-**商用授权联系方式**见下方社交平台。
+Anthropic이 Claude Design의 프롬프트를 명확하게 써줘서 감사하다. 다른 제품의 영감을 바탕으로 한 이런 2차 창작은, AI 시대의 오픈소스 문화의 새로운 형태이다.
 
 ---
 
-## Connect · 花生（花叔）
+## License · 사용 허가
 
-花生是 AI Native Coder、独立开发者、AI 自媒体博主。代表作：小猫补光灯（AppStore 付费榜 Top 1）、《一本书玩转 DeepSeek》、女娲 .skill（GitHub 12000+ star）。自媒体全平台 30 万+ 粉丝。
+**개인 사용 무료** — 학습, 연구, 창작, 자신을 위한 작업, 글 쓰기, 부업, 블로그/공식 계정 발표, 마음대로 쓰되 인사할 필요 없다.
 
-| 平台 | 账号 | 链接 |
+**기업 상업 사용 금지** — 임의의 회사, 팀, 또는 영리 목적의 조직이 이 스킬을 제품에 통합하거나, 대외 서비스에 사용하거나, 고객에게 전달하는 작업에 사용하고자 한다면, **반드시 원작자와 연락하여 허가를 받아야 한다**. 포함되되 이에 국한되지 않음:
+- 스킬을 사내 툴체인의 일부로 사용
+- 스킬 결과물을 대외 전달물의 주요 창작 수단으로 사용
+- 스킬을 기반으로 2차 개발하여 상업 제품화
+- 고객 상업 프로젝트에서 사용
+
+**상업 허가 연락처**는 아래 소셜 플랫폼을 참조.
+
+---
+
+## Connect · 花生（花叔）— 원작자
+
+花生은 AI Native Coder, 독립 개발자, AI 미디어 크리에이터이다. 대표작: 고양이 보조등 (AppStore 유료 순위 Top 1), 《一本书玩转 DeepSeek》, 누와 .skill (GitHub 12000+ star). 미디어 전 플랫폼 30만+ 팔로워.
+
+| 플랫폼 | 계정 | 링크 |
 |---|---|---|
 | X / Twitter | @AlchainHust | https://x.com/AlchainHust |
-| 公众号 | 花叔 | 微信搜索「花叔」 |
-| B 站 | 花叔 | https://space.bilibili.com/14097567 |
-| YouTube | 花叔 | https://www.youtube.com/@Alchain |
-| 小红书 | 花叔 | https://www.xiaohongshu.com/user/profile/5abc6f17e8ac2b109179dfdf |
-| 官网 | huasheng.ai | https://www.huasheng.ai/ |
-| 开发者主页 | bookai.top | https://bookai.top |
+| 유튜브 | 花叔 | https://www.youtube.com/@Alchain |
+| 공식 홈페이지 | huasheng.ai | https://www.huasheng.ai/ |
+| 개발자 홈페이지 | bookai.top | https://bookai.top |
 
-商用授权、合作咨询、自媒体约稿 → 以上任一平台私信花生即可。
+상업 허가, 협업 문의, 미디어 기고 → 위 임의 플랫폼에서 花生에게 DM.
+
+---
+
+## 한국어 버전 정보
+
+| 항목 | 내용 |
+|---|---|
+| **포크 저장소** | [ktkarchive/ktk-design](https://github.com/ktkarchive/ktk-design) |
+| **원작자** | 花生 (花叔) / alchaincyf |
+| **한국어 버전 maintainer** | ktkarchive |
+| **번역 범위** | README, SKILL.md, references (진행 중) |
+| **라이선스** | 원본 LICENSE와 동일 (개인 사용 무료 / 기업 상업 사용 금지) |
+
+한국어 버전 관련 문의, 번역 오류 제보, 기여 → 이 저장소의 Issues를 이용해 주세요.
