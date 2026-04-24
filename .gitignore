@@ -20,3 +20,10 @@ Thumbs.db
 demos/_frames_*.png
 demos/_verify.js
 demos/_verify.mjs
+
+# Web UI build output
+web/dist/
+
+# Communication folder (runtime file exchange)
+communication/
+

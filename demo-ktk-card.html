@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KTK Design · Demo Card</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: oklch(97% 0.01 280);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 48px 24px;
+  }
+
+  .card {
+    width: 720px;
+    max-width: 100%;
+    background: oklch(100% 0 0);
+    border-radius: 2px;
+    box-shadow: 0 1px 3px oklch(0% 0 0 / 0.08),
+                0 12px 40px oklch(0% 0 0 / 0.06);
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    overflow: hidden;
+  }
+
+  .card-visual {
+    background: oklch(25% 0.08 260);
+    display: grid;
+    place-items: center;
+    position: relative;
+    padding: 48px 32px;
+  }
+
+  .card-visual::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 30% 40%,
+      oklch(35% 0.12 30 / 0.15) 0%,
+      transparent 70%);
+    pointer-events: none;
+  }
+
+  .mark {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 96px;
+    font-weight: 600;
+    line-height: 1;
+    color: oklch(85% 0.02 260);
+    letter-spacing: -0.04em;
+    position: relative;
+    z-index: 1;
+  }
+
+  .mark span {
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 12px;
+    color: oklch(70% 0.04 30);
+  }
+
+  .card-body {
+    padding: 56px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: oklch(55% 0.12 30);
+  }
+
+  h1 {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: oklch(20% 0.02 280);
+    letter-spacing: -0.02em;
+    text-wrap: pretty;
+  }
+
+  p.lead {
+    font-size: 15px;
+    line-height: 1.7;
+    color: oklch(45% 0.02 280);
+    text-wrap: pretty;
+  }
+
+  .divider {
+    width: 32px;
+    height: 1px;
+    background: oklch(80% 0.02 280);
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .feature {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .feature-num {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: oklch(25% 0.08 260);
+    line-height: 1;
+  }
+
+  .feature-label {
+    font-size: 12px;
+    color: oklch(55% 0.02 280);
+    line-height: 1.4;
+  }
+
+  .meta {
+    margin-top: auto;
+    padding-top: 16px;
+    font-size: 12px;
+    color: oklch(60% 0.02 280);
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 640px) {
+    .card { grid-template-columns: 1fr; }
+    .card-visual { padding: 40px 24px; }
+    .card-body { padding: 40px 28px; }
+    .features { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-visual">
+    <div class="mark">
+      KTK
+      <span>Design</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="eyebrow">HTML-Native Design Skill</div>
+    <h1>에이전트에게 말하면<br>디자인이 나옵니다</h1>
+    <p class="lead">
+      Claude Code, Cursor, Codex — 어떤 에이전트에서든.
+      한 문장으로 고해상도 프로토타입, 슬라이드, 애니메이션,
+      인포그래픽을 만듭니다.
+    </p>
+    <div class="divider"></div>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-num">20</div>
+        <div class="feature-label">디자인<br>철학</div>
+      </div>
+      <div class="feature">
+        <div class="feature-num">5</div>
+        <div class="feature-label">차원 전문가<br>평가</div>
+      </div>
+      <div class="feature">
+        <div class="feature-num">3</div>
+        <div class="feature-label">분만에<br>시작</div>
+      </div>
+    </div>
+    <div class="meta">
+      github.com/ktkarchive/ktk-design · 한국어 버전
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
